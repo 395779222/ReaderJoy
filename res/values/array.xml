@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="bookid">
+        <item>book0.txt</item>
+        <item>book1.txt</item>
+    </string-array>
+    <string-array name="bookname">
+        <item>泡MM专用短信</item>
+        <item> 都破残穷</item>
+    </string-array>
+    
+    <string-array name="bookauthor">
+        <item>未知</item>
+        <item>天蚕土豆</item>
+    </string-array>
+    
+     <string-array name="booktype">
+        <item>1</item>
+        <item>1</item>
+    </string-array>
+
+</resources>
