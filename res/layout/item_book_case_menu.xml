@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/img_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="120dp"
         android:background="@drawable/book0" >
     </ImageView>
 
@@ -16,16 +16,10 @@
         android:id="@+id/book_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_book"
+        android:layout_below="@+id/img_book"
+      	android:maxLines="2"	
         android:layout_alignParentLeft="true"
         android:textColor="@color/dark"
         android:text="都破残穷 " />
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#000033"
-        android:layout_below="@+id/img_book"
-        android:text="完结" />
 
 </RelativeLayout>

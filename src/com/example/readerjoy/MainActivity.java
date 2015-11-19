@@ -20,6 +20,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
@@ -54,6 +55,7 @@ public class MainActivity extends BaseActivity {
 		gview_bottom_menu =  (GridView)findViewById(R.id .gview_bottom_menu);
 		initFrame();
 		sp = getSharedPreferences("mark", MODE_PRIVATE);
+		isInit = sp.getBoolean("isInit", false);
 		//初始化本地书籍列表
 		localbook = new LocalBook(this, "localbook");
 		if (!isInit) {
@@ -76,20 +78,16 @@ public class MainActivity extends BaseActivity {
 	public void bindAdapter() {
 		dataMenuList = new ArrayList<BottomMenu>();
 		
-		BottomMenu menu = new BottomMenu();
-		menu.setName("我的");
+		
 		BottomMenu menu1 = new BottomMenu();
 		menu1.setName("书架");
 		menu1.setSelected(true);
+		menu1.setClassTo(BookcaseFragment.class);
 		BottomMenu menu2 = new BottomMenu();
 		menu2.setName("书城");
-		BottomMenu menu3 = new BottomMenu();
-		menu3.setName("搜索");
-		dataMenuList.add(menu);
 		dataMenuList.add(menu1);
-
 		dataMenuList.add(menu2);
-		dataMenuList.add(menu3);
+	
 		grid_bottom_adapter = new GridBottomMenuAdapter(MainActivity.this,dataMenuList);
 		gview_bottom_menu.setAdapter(grid_bottom_adapter);
 		
@@ -101,15 +99,19 @@ public class MainActivity extends BaseActivity {
 			@SuppressLint("NewApi")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+				/*BottomMenu menu = dataMenuList.get(position);
 				FragmentManager fragmentManager = getFragmentManager();
 				FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
-				fragmentTransaction.replace(R.id.fragmentContent,null);
-				fragmentTransaction.addToBackStack(null);
-				//提交修改
-				fragmentTransaction.commit();
-
-				
+				try {
+					fragmentTransaction.replace(R.id.fragmentContent,(Fragment) menu.getClassTo().newInstance());
+					fragmentTransaction.addToBackStack(null);
+					//提交修改
+					fragmentTransaction.commit();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}*/
 			}});
 		
 	}

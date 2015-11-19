@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+          android:id="@+id/jptj"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:paddingBottom="11dp"
+          android:paddingLeft="15dp"
+            android:background="#efc772"
+          android:paddingTop="11dp"
+          android:soundEffectsEnabled="false" >
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:textColor="@color/dark"
+              android:text="精品推荐"
+              android:textSize="16sp" />
+
+          <TextView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="2dp"
+              android:background="@drawable/ico_arrow_right" />
+      </RelativeLayout>
+     <GridView
+        android:id="@+id/gview_jptj"
+        android:layout_below="@+id/jptj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:horizontalSpacing="10dp" 
+        android:numColumns="3" >
+    </GridView>
+    
+     <RelativeLayout
+          android:id="@+id/byzq"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:paddingBottom="11dp"
+          android:paddingLeft="15dp"
+            android:background="#efc772"
+          android:layout_below="@+id/gview_jptj"
+          android:paddingTop="11dp"
+          android:soundEffectsEnabled="false" >
+
+          <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerVertical="true"
+              android:layout_marginLeft="15dp"
+              android:layout_marginRight="15dp"
+              android:textColor="@color/dark"
+              android:text="精品推荐"
+              android:textSize="16sp" />
+
+          <TextView
+              android:layout_width="32dp"
+              android:layout_height="32dp"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="2dp"
+              android:background="@drawable/ico_arrow_right" />
+      </RelativeLayout>
+	
+	 <GridView
+	     android:id="@+id/gview_byzq"
+	     android:layout_width="match_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentLeft="true"
+	     android:layout_below="@+id/byzq"
+	     android:horizontalSpacing="10dp"
+	     android:numColumns="3" >
+	 </GridView>
+    
+</RelativeLayout>

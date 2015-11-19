@@ -9,21 +9,29 @@
         android:id="@+id/header"
         />
     
-    <!-- 中间内容 -->
-  <FrameLayout android:id="@+id/fragmentContent"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/header"
-    />
-
+   <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:scrollbars="none"
+        android:soundEffectsEnabled="false" >
+	    <!-- 中间内容 -->
+	  <FrameLayout android:id="@+id/fragmentContent"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    />
+	</ScrollView>
 
     <GridView
         android:id="@+id/gview_bottom_menu"
-        android:layout_width="match_parent"
+        android:clipToPadding="true"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:horizontalSpacing="10dp" 
-        android:numColumns="4" >
+        android:horizontalSpacing="0dp" 
+        android:numColumns="2" >
     </GridView>
 
 </RelativeLayout>

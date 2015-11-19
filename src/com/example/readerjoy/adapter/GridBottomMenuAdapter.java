@@ -44,11 +44,11 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.item_bottom_menu, null);
 			bottomMenuHolder = new BottomMenuHolder(convertView);
-			bottomMenuHolder.text_bottom_name.setText(menu.getName());
+			bottomMenuHolder.text_name.setText(menu.getName());
 			if(menu.isSelected()){
-				bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg_selected);
+				//bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg_selected);
 			}else{
-				bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg);
+				//bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg);
 			}
 		}
 		
@@ -56,9 +56,9 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 	}
 	
 	private class BottomMenuHolder {
-		Button text_bottom_name;
+		TextView text_name;
 		private BottomMenuHolder(View convertView) {
-			text_bottom_name = (Button) convertView.findViewById(R.id.text_bottom_name);
+			text_name = (TextView) convertView.findViewById(R.id.text_name);
 		}
 	}
 }
