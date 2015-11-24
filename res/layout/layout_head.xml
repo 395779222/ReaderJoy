@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     android:id="@+id/header"
+    android:id="@+id/header"
     android:layout_width="fill_parent"
     android:layout_height="48dp"
-    android:background="#37B9AB"
+    android:background="@color/header"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
 
     <ImageView
         android:id="@+id/btnExit"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:adjustViewBounds="true"
-        android:background="@drawable/btn_bg_back"
         android:drawSelectorOnTop="true"
         android:maxHeight="24dp"
         android:maxWidth="60dp"
@@ -38,15 +37,31 @@
         android:textColor="#ffffff"
         android:textSize="20sp" />
 
-    <TextView
+    <ImageView
         android:id="@+id/rightSign"
         android:layout_width="60dp"
-        android:layout_height="match_parent"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:src="@drawable/search"
         android:gravity="center"
-        android:text="随机"
         android:textColor="#ffffff"
         android:textSize="16sp"
-        android:visibility="gone" />
-
+        android:visibility="gone"
+        />
+    
+	<TextView
+        android:id="@+id/rightText"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:scaleType="fitXY"
+        android:singleLine="true"
+        android:text="开通包月"
+        android:textColor="#ffffff"
+        android:textSize="20dp" 
+        android:visibility="gone"/>
 </RelativeLayout>

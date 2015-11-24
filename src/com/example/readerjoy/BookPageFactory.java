@@ -100,6 +100,7 @@ public class BookPageFactory {
 			m_lines = pageDown();
 		if (m_lines.size() > 0) {
 			if (m_book_bg == null)
+				
 				c.drawColor(m_backColor);
 			else
 				c.drawBitmap(m_book_bg, 0, 0, null);

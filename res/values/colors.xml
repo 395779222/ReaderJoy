@@ -6,4 +6,9 @@
  	<color name="btn_select">#0D9D93</color>
  	<color name="dark">#000033</color>
  	 <color name="gray">#808080</color>
+ 	<color name="header">#efc772</color>
+ 	<color name="botton_un_select">#747882</color>
+ 	<color name="line_bj">#c9c9c9</color>
+ 	 <color name="item_bj">#eeeeee</color>
+ 	 <color name="lineColor">#d7d7d7</color>
 </resources>

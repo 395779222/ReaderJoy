@@ -4,12 +4,16 @@ import java.util.List;
 
 import com.example.readerjoy.R;
 import com.example.readerjoy.entity.BottomMenu;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class GridBottomMenuAdapter extends BaseAdapter {
@@ -35,21 +39,33 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		BottomMenuHolder bottomMenuHolder = null;
-		if(bottomMenList!=null&&bottomMenList.size()>0){
-			BottomMenu menu = bottomMenList.get(position);
+		if(convertView == null){
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.item_bottom_menu, null);
 			bottomMenuHolder = new BottomMenuHolder(convertView);
+			convertView.setTag(bottomMenuHolder);
+		}
+		else{
+			bottomMenuHolder = (BottomMenuHolder) convertView.getTag();
+		}
+		if(bottomMenList!=null&&bottomMenList.size()>0){
+			BottomMenu menu = bottomMenList.get(position);
 			bottomMenuHolder.text_name.setText(menu.getName());
 			if(menu.isSelected()){
-				//bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg_selected);
+				Resources resource = (Resources) context.getResources();  
+				ColorStateList csl = (ColorStateList) resource.getColorStateList(R.color.header);
+				bottomMenuHolder.text_name.setTextColor(csl);
+				bottomMenuHolder.img_menu.setBackgroundResource(menu.getSelectedImg());
 			}else{
-				//bottomMenuHolder.text_bottom_name.setBackgroundResource(R.drawable.corners_bg);
+				Resources resource = (Resources) context.getResources();  
+				ColorStateList csl = (ColorStateList) resource.getColorStateList(R.color.botton_un_select);
+				bottomMenuHolder.text_name.setTextColor(csl);
+				bottomMenuHolder.img_menu.setBackgroundResource(menu.getUnSelectedImg());
 			}
+		
 		}
 		
 		return convertView;
@@ -57,8 +73,10 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 	
 	private class BottomMenuHolder {
 		TextView text_name;
+		ImageView img_menu;
 		private BottomMenuHolder(View convertView) {
 			text_name = (TextView) convertView.findViewById(R.id.text_name);
+			img_menu = (ImageView) convertView.findViewById(R.id.img_menu);
 		}
 	}
 }

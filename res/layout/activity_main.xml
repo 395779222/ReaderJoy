@@ -10,11 +10,11 @@
         />
     
    <ScrollView
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_above="@+id/gview_bottom_menu"
         android:scrollbars="none"
         android:soundEffectsEnabled="false" >
 	    <!-- 中间内容 -->

@@ -4,20 +4,39 @@
     <string-array name="bookid">
         <item>book0.txt</item>
         <item>book1.txt</item>
+        <item>book2.txt</item>
+        <item>book3.txt</item>
     </string-array>
     <string-array name="bookname">
         <item>泡MM专用短信</item>
         <item> 都破残穷</item>
+         <item> 学上飞狐</item>
+          <item> 笑傲江湖</item>
     </string-array>
     
     <string-array name="bookauthor">
         <item>未知</item>
         <item>天蚕土豆</item>
+         <item>金庸</item>
+          <item>金庸</item>
     </string-array>
     
      <string-array name="booktype">
         <item>1</item>
         <item>1</item>
+        <item>0</item>
+        <item>0</item>
     </string-array>
-
+	 <string-array name="money">
+        <item>5</item>
+        <item>5</item>
+        <item>0</item>
+        <item>0</item>
+    </string-array>
+     <string-array name="bookintroductions">
+        <item>从前有一座庙，庙里有一个小和尚</item>
+        <item>从前有一座庙，庙里有一个小和尚</item>
+        <item>从前有一座庙，庙里有一个小和尚</item>
+        <item>从前有一座庙，庙里有一个小和尚</item>
+    </string-array>
 </resources>

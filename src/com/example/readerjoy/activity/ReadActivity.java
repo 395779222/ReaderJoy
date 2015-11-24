@@ -83,6 +83,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	private SharedPreferences sp;
 	int defaultSize = 0;
 	// 实例化Handler
+	
 	public Handler mHandler = new Handler() {
 		// 接收子线程发来的消息，同时更新UI
 		public void handleMessage(Message msg) {
@@ -108,10 +109,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	 * 记录数据 并清空popupwindow
 	 */
 	private void clear() {
-		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-		show = false;
-		mPopupWindow.dismiss();
-		popDismiss();
+		closeWinPop();
 	}
 
 	/**
@@ -262,7 +260,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		ccc = intent.getStringExtra("ccc");
 
 		mPageWidget.setBitmaps(mCurPageBitmap, mCurPageBitmap);
-
+		
 		mPageWidget.setOnTouchListener(new OnTouchListener() {
 			@SuppressLint("WrongCall")
 			@Override
@@ -311,6 +309,8 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 						ret = mPageWidget.doTouchEvent(e);
 						return ret;
 					}
+				}else{
+					closeWinPop();
 				}
 				return false;
 			}
@@ -376,10 +376,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			} else {
 				if (!ccc.equals("ccc")) {
 					if (show) {// 如果popwindow正在显示
-						getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-						show = false;
-						mPopupWindow.dismiss();
-						popDismiss();
+						closeWinPop();
 					} else {
 						this.finish();
 					}
@@ -398,10 +395,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			if (show) {
-				getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-				show = false;
-				mPopupWindow.dismiss();
-				popDismiss();
+				closeWinPop();
 
 			} else {
 
@@ -414,6 +408,22 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	/** 
+	* @Title: closeWinPop 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param     设定文件 
+	* @date 2015年11月24日 下午1:03:59
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	private void closeWinPop() {
+		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		show = false;
+		mPopupWindow.dismiss();
+		popDismiss();
 	}
 
 	@Override

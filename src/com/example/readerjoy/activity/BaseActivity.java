@@ -12,8 +12,6 @@ public abstract class BaseActivity extends Activity{
 		bindWidgetEevent();
 		process();
 	}
-
-
 	/**
 	 * 绑定控件，子类实现
 	 */

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f8f8f8"
+    android:orientation="vertical" >
+    
+    <RelativeLayout
+	      android:layout_width="match_parent"
+          android:layout_height="180dp"
+          android:background="@color/white">
+          
+        <ImageView 
+           android:id="@+id/ico_user"
+           android:layout_width="50dp"
+    	   android:layout_height="50dp"
+    	   android:layout_marginTop="25dp"
+    	   android:layout_centerHorizontal="true"
+    	   android:background="@drawable/alreay_login"
+           />
+        
+        <TextView
+	        android:id="@+id/user_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	      	android:layout_below="@+id/ico_user"
+	      	 android:layout_marginTop="25dp"
+	        android:textColor="#555555"
+	        android:layout_centerHorizontal="true"
+	        android:textSize="24dp"
+	        android:text="18113890098" />
+        
+        <Button
+	         android:id="@+id/btn_isby"
+	         android:text="未包月"
+	         android:textSize="12.5dp"
+	         android:textColor="@color/white"
+	         android:layout_marginTop="10dp"
+	         android:layout_width="50dp"
+	         android:layout_height="wrap_content"
+	         android:layout_centerHorizontal="true"
+	         android:layout_below="@+id/user_name"
+	         android:background="@drawable/corners_btn_unable"/>
+        
+    </RelativeLayout>
+	
+	 <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_bj"/>
+	 <RelativeLayout
+	     android:id="@+id/ktby"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentLeft="true"
+
+	     android:clickable="true"
+	     android:paddingBottom="11dp"
+	     android:paddingLeft="15dp"
+	     android:paddingTop="11dp"
+	     android:soundEffectsEnabled="false" >
+
+	     <TextView
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_centerVertical="true"
+	         android:layout_marginLeft="15dp"
+	         android:layout_marginRight="15dp"
+	         android:text="开通包月"
+	         android:textColor="#555555"
+	         android:textSize="16sp" />
+
+	     <TextView
+	         android:layout_width="25dp"
+	         android:layout_height="25dp"
+	         android:layout_alignParentRight="true"
+	         android:layout_centerVertical="true"
+	         android:layout_marginRight="2dp"
+	         android:background="@drawable/ico_arrow_right" />
+	 </RelativeLayout>
+	 
+	 <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_bj"/>
+	 
+	<RelativeLayout
+	     android:id="@+id/byzq"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentLeft="true"
+
+	     android:clickable="true"
+	     android:paddingBottom="11dp"
+	     android:paddingLeft="15dp"
+	     android:paddingTop="11dp"
+	     android:soundEffectsEnabled="false" >
+
+	     <TextView
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginLeft="15dp"
+	         android:layout_marginRight="15dp"
+	         android:text="包月专区"
+	         android:textColor="#555555"
+	         android:textSize="16sp" />
+
+	     <TextView
+	         android:layout_width="25dp"
+	         android:layout_height="25dp"
+	         android:layout_alignParentRight="true"
+	         android:layout_centerVertical="true"
+	         android:layout_marginRight="2dp"
+	         android:background="@drawable/ico_arrow_right" />
+	 </RelativeLayout>
+	 	 <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_bj"/>
+	 
+</LinearLayout>

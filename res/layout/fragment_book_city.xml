@@ -5,43 +5,19 @@
     android:background="@color/white"
     android:orientation="vertical" >
     
-    <RelativeLayout
-          android:id="@+id/jptj"
+    <ImageView 
+          android:id="@+id/img_poster"
           android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:clickable="true"
-          android:paddingBottom="11dp"
-          android:paddingLeft="15dp"
-            android:background="#efc772"
-          android:paddingTop="11dp"
-          android:soundEffectsEnabled="false" >
-
-          <TextView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_centerVertical="true"
-              android:layout_marginLeft="15dp"
-              android:layout_marginRight="15dp"
-              android:textColor="@color/dark"
-              android:text="精品推荐"
-              android:textSize="16sp" />
-
-          <TextView
-              android:layout_width="32dp"
-              android:layout_height="32dp"
-              android:layout_alignParentRight="true"
-              android:layout_centerVertical="true"
-              android:layout_marginRight="2dp"
-              android:background="@drawable/ico_arrow_right" />
-      </RelativeLayout>
-     <GridView
+          android:layout_height="120dp"
+          android:background="@drawable/book_city_poster"/>
+     <com.example.readerjoy.base.widget.GridViewForScrollView
         android:id="@+id/gview_jptj"
         android:layout_below="@+id/jptj"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:horizontalSpacing="10dp" 
         android:numColumns="3" >
-    </GridView>
+    </com.example.readerjoy.base.widget.GridViewForScrollView>
     
      <RelativeLayout
           android:id="@+id/byzq"
@@ -50,7 +26,7 @@
           android:clickable="true"
           android:paddingBottom="11dp"
           android:paddingLeft="15dp"
-            android:background="#efc772"
+            android:background="#f3efe4"
           android:layout_below="@+id/gview_jptj"
           android:paddingTop="11dp"
           android:soundEffectsEnabled="false" >
@@ -61,20 +37,20 @@
               android:layout_centerVertical="true"
               android:layout_marginLeft="15dp"
               android:layout_marginRight="15dp"
-              android:textColor="@color/dark"
-              android:text="精品推荐"
-              android:textSize="16sp" />
+              android:textColor="#555555"
+              android:text="包月专区"
+              android:textSize="16dp" />
 
           <TextView
-              android:layout_width="32dp"
-              android:layout_height="32dp"
+              android:layout_width="25dp"
+              android:layout_height="25dp"
               android:layout_alignParentRight="true"
               android:layout_centerVertical="true"
               android:layout_marginRight="2dp"
               android:background="@drawable/ico_arrow_right" />
       </RelativeLayout>
 	
-	 <GridView
+	 <com.example.readerjoy.base.widget.GridViewForScrollView
 	     android:id="@+id/gview_byzq"
 	     android:layout_width="match_parent"
 	     android:layout_height="wrap_content"
@@ -82,6 +58,38 @@
 	     android:layout_below="@+id/byzq"
 	     android:horizontalSpacing="10dp"
 	     android:numColumns="3" >
-	 </GridView>
+	 </com.example.readerjoy.base.widget.GridViewForScrollView>
+
+	 <RelativeLayout
+	     android:id="@+id/jptj"
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content"
+	     android:layout_alignParentLeft="true"
+	     android:layout_below="@+id/img_poster"
+	     android:background="#f3efe4"
+	     android:clickable="true"
+	     android:paddingBottom="11dp"
+	     android:paddingLeft="15dp"
+	     android:paddingTop="11dp"
+	     android:soundEffectsEnabled="false" >
+
+	     <TextView
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_centerVertical="true"
+	         android:layout_marginLeft="15dp"
+	         android:layout_marginRight="15dp"
+	         android:text="精品推荐"
+	         android:textColor="#555555"
+	         android:textSize="16sp" />
+
+	     <TextView
+	         android:layout_width="25dp"
+	         android:layout_height="25dp"
+	         android:layout_alignParentRight="true"
+	         android:layout_centerVertical="true"
+	         android:layout_marginRight="2dp"
+	         android:background="@drawable/ico_arrow_right" />
+	 </RelativeLayout>
     
 </RelativeLayout>
