@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	 <!-- 文件名,对应的图片也叫一样的名字 -->
     <string-array name="bookid">
         <item>book0.txt</item>
         <item>book1.txt</item>
@@ -8,7 +8,7 @@
         <item>book3.txt</item>
     </string-array>
     <string-array name="bookname">
-        <item>泡MM专用短信</item>
+        <item>机智如我</item>
         <item> 都破残穷</item>
          <item> 学上飞狐</item>
           <item> 笑傲江湖</item>
@@ -20,11 +20,11 @@
          <item>金庸</item>
           <item>金庸</item>
     </string-array>
-    
+    <!-- 1包月，0：非包月 -->
      <string-array name="booktype">
         <item>1</item>
         <item>1</item>
-        <item>0</item>
+        <item>1</item>
         <item>0</item>
     </string-array>
 	 <string-array name="money">
@@ -39,4 +39,18 @@
         <item>从前有一座庙，庙里有一个小和尚</item>
         <item>从前有一座庙，庙里有一个小和尚</item>
     </string-array>
+    <!--  分类 -->
+     <string-array name="cateGoryTypes">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </string-array>
+        <string-array name="bookIsPurchases">
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+        <item>0</item>
+    </string-array>
+ 
 </resources>

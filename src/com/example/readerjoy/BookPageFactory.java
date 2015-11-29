@@ -8,6 +8,9 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.util.Vector;
+
+import com.example.readerjoy.activity.ReadActivity;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -43,7 +46,8 @@ public class BookPageFactory {
 	private float mVisibleHeight; // 绘制内容的宽
 	private float mVisibleWidth; // 绘制内容的宽
 	private int mWidth;
-
+	private boolean isNight;
+	float fPercent;
 	public BookPageFactory(int w, int h) {
 		mWidth = w;
 		mHeight = h;
@@ -51,7 +55,9 @@ public class BookPageFactory {
 		mPaint.setTextAlign(Align.LEFT);// 做对其
 		mPaint.setTextSize(m_fontSize);// 字体大小
 		mPaint.setColor(m_textColor);// 字体颜色
+		//实际显示小说的内容的宽度
 		mVisibleWidth = mWidth - marginWidth * 2;
+		//实际显示小说的内容的高度
 		mVisibleHeight = mHeight - marginHeight * 2;
 		mLineCount = (int) (mVisibleHeight / m_fontSize) - 1; // 可显示的行数,-1是因为底部显示进度的位置容易被遮住
 	}
@@ -71,13 +77,14 @@ public class BookPageFactory {
 	public boolean islastPage() {
 		return m_islastPage;
 	}
-
+	
 	/**
 	 * 向后翻页
 	 * 
 	 * @throws IOException
 	 */
 	public void nextPage() throws IOException {
+		//如果到了最后一页
 		if (m_mbBufEnd >= m_mbBufLen) {
 			m_islastPage = true;
 			return;
@@ -86,6 +93,7 @@ public class BookPageFactory {
 		m_lines.clear();
 		m_mbBufBegin = m_mbBufEnd;// 下一页页起始位置=当前页结束位置
 		m_lines = pageDown();
+		
 	}
 
 	public void currentPage() throws IOException {
@@ -99,18 +107,23 @@ public class BookPageFactory {
 		if (m_lines.size() == 0)
 			m_lines = pageDown();
 		if (m_lines.size() > 0) {
+			/*c.drawColor(m_backColor);
 			if (m_book_bg == null)
-				
-				c.drawColor(m_backColor);
+				c.drawColor(Color.WHITE);
 			else
-				c.drawBitmap(m_book_bg, 0, 0, null);
+				c.drawBitmap(m_book_bg, 0, 0, null);*/
+			if(isNight){
+				c.drawColor(Color.BLACK);
+			}else{
+				c.drawColor(Color.parseColor("#ffffff"));
+			}
 			int y = marginHeight;
 			for (String strLine : m_lines) {
 				y += m_fontSize;
 				c.drawText(strLine, marginWidth, y, mPaint);
 			}
 		}
-		float fPercent = (float) (m_mbBufBegin * 1.0 / m_mbBufLen);
+		fPercent = (float) (m_mbBufBegin * 1.0 / m_mbBufLen);
 		DecimalFormat df = new DecimalFormat("#0.0");
 		String strPercent = df.format(fPercent * 100) + "%";
 		int nPercentWidth = (int) mPaint.measureText("999.9%") + 1;
@@ -152,7 +165,9 @@ public class BookPageFactory {
 		mPaint.setColor(m_textColor);
 		String strParagraph = "";
 		Vector<String> lines = new Vector<String>();
+		//当lines的size小于每页可以显示的行数，当然必须得小于书的总长度
 		while (lines.size() < mLineCount && m_mbBufEnd < m_mbBufLen) {
+			//获取每一行的内容
 			byte[] paraBuf = readParagraphForward(m_mbBufEnd);
 			m_mbBufEnd += paraBuf.length;// 每次读取后，记录结束点位置，该位置是段落结束位置
 			try {
@@ -169,15 +184,15 @@ public class BookPageFactory {
 				strReturn = "\n";
 				strParagraph = strParagraph.replaceAll("\n", "");
 			}
-
+			//若独处的内容为空
 			if (strParagraph.length() == 0) {
 				lines.add(strParagraph);
 			}
 			while (strParagraph.length() > 0) {
 				// 画一行文字
-				int nSize = mPaint.breakText(strParagraph, true, mVisibleWidth,
-						null);
+				int nSize = mPaint.breakText(strParagraph, true, mVisibleWidth,null);
 				lines.add(strParagraph.substring(0, nSize));
+				//这里若是不等于0 则说明 该页最后一段只显示了一部分，则从新定位结束点位置
 				strParagraph = strParagraph.substring(nSize);// 得到剩余的文字
 				// 超出最大行数则不再画
 				if (lines.size() >= mLineCount) {
@@ -325,6 +340,8 @@ public class BookPageFactory {
 		int i = nStart;
 		byte b0, b1;
 		// 根据编码格式判断换行
+		//十六进制的a不就是十进制的10么,d就是13.
+		//你看下ASCII码表,10和13就是\r\n
 		if (m_strCharsetName.equals("UTF-16LE")) {
 			while (i < m_mbBufLen - 1) {
 				b0 = m_mbBuf.get(i++);
@@ -400,4 +417,22 @@ public class BookPageFactory {
 		return m_mbBufEnd;
 	}
 
+	public float getfPercent() {
+		return fPercent;
+	}
+
+	public void setfPercent(float fPercent) {
+		this.fPercent = fPercent;
+	}
+
+	public boolean isNight() {
+		return isNight;
+	}
+
+	public void setNight(boolean isNight) {
+		this.isNight = isNight;
+	}
+	
+	
+	
 }

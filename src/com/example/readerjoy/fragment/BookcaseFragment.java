@@ -23,10 +23,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.RelativeLayout;
 import android.widget.AdapterView.OnItemClickListener;
 
 @SuppressLint("NewApi")
@@ -36,6 +39,9 @@ public class BookcaseFragment extends Fragment{
 	private List<Book> dataList;
 	private BookCaseAdapter adapter;
 	private LocalBook localbook;
+	private RelativeLayout main;
+	float beginx = 0;
+	float beginy = 0;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
@@ -46,6 +52,7 @@ public class BookcaseFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater,
            ViewGroup container, Bundle savedInstanceState) {
     	mainView =  inflater.inflate(R.layout.fragment_book_case, null);
+    	main = (RelativeLayout) mainView.findViewById(R.id.main);
         init();
         initEvent();
         return mainView;
@@ -57,7 +64,7 @@ public class BookcaseFragment extends Fragment{
 		localbook = new LocalBook(getActivity());
 		SQLiteDatabase dbSelect = localbook.getReadableDatabase();
 		
-		String col[] = { "bookName","imgBookId","path","author","intrdoduction","type","money","isRead"};
+		String col[] = { "bookName","imgBookId","path","author","intrdoduction","type","money","isRead","bookIsPurchase"};
 		String[] val = {"1"};
 		Cursor cur = dbSelect.query("localbook", col, "isRead=?",val, null,null,null);
 		Integer num = cur.getCount();
@@ -73,6 +80,7 @@ public class BookcaseFragment extends Fragment{
 				String intrdoduction = cur.getString(cur.getColumnIndex("intrdoduction"));
 				String type = cur.getString(cur.getColumnIndex("type"));
 				String money = cur.getString(cur.getColumnIndex("money"));
+				String bookIsPurchase = cur.getString(cur.getColumnIndex("bookIsPurchase"));
 				Book book = new Book();
 				book.setAuthor(author);
 				book.setBookName(bookName);
@@ -81,6 +89,7 @@ public class BookcaseFragment extends Fragment{
 				book.setIntrdoduction(intrdoduction);
 				book.setType(Integer.parseInt(type));
 				book.setMoney(Integer.parseInt(money));
+				book.setBookIsPurchase(Integer.parseInt(bookIsPurchase));
 				dataList.add(book);
 			}
 			
@@ -91,13 +100,38 @@ public class BookcaseFragment extends Fragment{
 		dataList.add(addBook);
 		gview_book = (GridView) mainView.findViewById(R.id.gview_book);
 		
-		adapter = new BookCaseAdapter(getActivity(),dataList);
+		adapter = new BookCaseAdapter(getActivity(),dataList,true);
 		gview_book.setAdapter(adapter);
 		
 	}
 
 	private void initEvent() {
-		gview_book.setOnItemClickListener(new OnItemClickListener() {
+		/*main.setOnTouchListener(new OnTouchListener() {
+			@SuppressLint("WrongCall")
+			@Override
+			public boolean onTouch(View v, MotionEvent e) {
+				if(!isEdit){
+					if(e.getAction() == MotionEvent.ACTION_DOWN){
+						beginx = e.getX();
+						beginy = e.getY();
+					}
+					if(e.getAction()==MotionEvent.ACTION_UP){
+						//右滑
+						if(e.getX()-beginx<0){
+							MainActivity activity = (MainActivity) getActivity();
+							//跳转到书城页面
+							activity.updateFragment("back");
+						}
+					}
+				}
+				else{
+					return false;
+				}
+				return true;
+				
+			}
+		});*/
+		/*gview_book.setOnItemClickListener(new OnItemClickListener() {
 			@SuppressLint("NewApi")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -108,15 +142,76 @@ public class BookcaseFragment extends Fragment{
 				}else{
 					Intent it = new Intent();
 					it.setClass(getActivity()	, ReadActivity.class);
-					it.putExtra("bookPath", book.getPath());
+					Bundle mBundle = new Bundle();     
+			        mBundle.putSerializable("book",book);   
+			        it.putExtras(mBundle); 
 					startActivity(it);
 				}
 				
-				/*Intent mIntent = new Intent(getActivity(),BookDetailActivity.class);
+				Intent mIntent = new Intent(getActivity(),BookDetailActivity.class);
 				Bundle mBundle = new Bundle();     
 		        mBundle.putSerializable("book",book);     
 		        mIntent.putExtras(mBundle);     
-				startActivity(mIntent);*/
-			}});
+				startActivity(mIntent);
+			}});*/
+	}
+	
+	public void editBookCase(){
+		if(dataList!=null&&dataList.size()>0){
+			for(Book book : dataList){
+				book.setEditStatue(true);
+				book.setSelected(false);
+			}
+			dataList.remove(dataList.size()-1);
+			adapter.setSelectNum(0);
+			adapter.notifyDataSetChanged();
+		}
+	}
+	
+	public void canCleEditBook(){
+		if(dataList!=null&&dataList.size()>0){
+			for(Book book : dataList){
+				book.setEditStatue(false);
+				book.setSelected(false);
+			}
+			adapter.setSelectNum(0);
+		}
+		Book addBook = new Book();
+		addBook.setImgBookId(R.drawable.book_add);
+		addBook.setType(3);
+		dataList.add(addBook);
+		adapter.notifyDataSetChanged();
+	}
+	/**
+	 * 
+	* @Title: delete 
+	* @Description: TODO(书架里的书移除) 
+	* @param     设定文件 
+	* @date 2015年11月25日 下午1:46:01
+	* @author jerry
+	* @return void    返回类型
+	* @throws
+	 */
+	public void delete(){
+		if(dataList!=null&&dataList.size()>0){
+			SQLiteDatabase db = localbook.getWritableDatabase();
+			for(int i = dataList.size() - 1;i >= 0;i--){
+				if(dataList.get(i).isSelected()){
+					String sql = "update localbook set isRead='0' where imgBookId='"+dataList.get(i).getImgBookId()+"'";
+					db.execSQL(sql);
+					dataList.remove(i);
+				}else{
+					dataList.get(i).setEditStatue(false);
+					dataList.get(i).setSelected(false);
+				}
+			}
+			db.close();
+		}
+		adapter.setSelectNum(0);
+		Book addBook = new Book();
+		addBook.setImgBookId(R.drawable.book_add);
+		addBook.setType(3);
+		dataList.add(addBook);
+		adapter.notifyDataSetChanged();
 	}
 }

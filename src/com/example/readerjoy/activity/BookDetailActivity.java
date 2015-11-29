@@ -15,7 +15,9 @@ import com.example.readerjoy.db.LocalBook;
 import com.example.readerjoy.entity.Book;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,10 +38,12 @@ public class BookDetailActivity extends BaseActivity{
 	private TextView book_money;
 	private TextView book_author;
 	private TextView tvTitle;
+	ImageView btnExit;
 	Book book;
 	Button btn_reader;
 	Button btn_shop;
-	 LocalBook localbook;
+	LocalBook localbook;
+
 	/* (非 Javadoc) 
 	* <p>Title: bindWidget</p> 
 	* <p>Description: </p>  
@@ -49,6 +53,7 @@ public class BookDetailActivity extends BaseActivity{
 	public void bindWidget() {
 		setContentView(R.layout.activity_book_detail);
 		img_book = (ImageView) findViewById(R.id.img_book);
+		btnExit  = (ImageView) findViewById(R.id.btnExit);
 		book_name = (TextView) findViewById(R.id.book_name);
 		book_introduction = (TextView) findViewById(R.id.book_introduction);
 		book_money = (TextView) findViewById(R.id.book_money);
@@ -68,14 +73,23 @@ public class BookDetailActivity extends BaseActivity{
 	*/ 
 	@Override
 	public void bindWidgetEevent() {
-		
+		btnExit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+			
+		});
 		btn_reader.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//editor.putInt(bookPath + "bookIsPurchase", begin).commit();
 				updateLoackBookStatus();
 				Intent it = new Intent();
 				it.setClass(BookDetailActivity.this	, ReadActivity.class);
-				it.putExtra("bookPath", book.getPath());
+				Bundle mBundle = new Bundle();     
+		        mBundle.putSerializable("book",book);   
+		        it.putExtras(mBundle); 
 				startActivity(it);
 			}
 			/**

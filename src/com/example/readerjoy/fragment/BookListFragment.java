@@ -10,6 +10,7 @@
 
 package com.example.readerjoy.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.readerjoy.BookStore;
@@ -49,10 +50,13 @@ public class BookListFragment extends Fragment{
 	List<BookCategory>categoryList ;
 	CategoryAdapter categoryAdapter ;
 	
-	ListViewForScrollView list_book;
 	List<Book>bookList ;
+	
+	ListViewForScrollView list_book;
+	List<Book>bookDateList ;
 	BookAdapter bookAdapter;
-	 @Override
+	
+	@Override
     public View onCreateView(LayoutInflater inflater,
            ViewGroup container, Bundle savedInstanceState) {
     	mainView =  inflater.inflate(R.layout.fragment_book_list, null);
@@ -79,7 +83,9 @@ public class BookListFragment extends Fragment{
 		gview_book_category.setAdapter(categoryAdapter);
 		
 		bookList = ((MainActivity)getActivity()).listToShowByType;
-		bookAdapter = new BookAdapter(getActivity(),bookList);
+		bookDateList =  ((MainActivity)getActivity()).listToShowByType;
+		
+		bookAdapter = new BookAdapter(getActivity(),bookDateList);
 		list_book.setAdapter(bookAdapter);
 		
 	}
@@ -104,6 +110,22 @@ public class BookListFragment extends Fragment{
 		        mBundle.putSerializable("book",book);     
 		        mIntent.putExtras(mBundle);     
 				startActivity(mIntent);
+			}
+		});
+		gview_book_category.setOnItemClickListener(new OnItemClickListener() {
+			@SuppressLint("NewApi")
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				bookDateList = new ArrayList<Book>();
+				bookDateList.clear();
+				BookCategory  cate = categoryList.get(position);
+				for(Book book : bookList){
+					if(book.getCateGoryType() == cate.getIndex()){
+						bookDateList.add(book);
+					}
+				}
+				bookAdapter = new BookAdapter(getActivity(),bookDateList);
+				list_book.setAdapter(bookAdapter);
 			}
 		});
 	}

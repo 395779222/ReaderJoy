@@ -16,8 +16,8 @@
         android:drawSelectorOnTop="true"
         android:maxHeight="24dp"
         android:maxWidth="60dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp"
+        android:paddingLeft="25dp"
+
         android:soundEffectsEnabled="false"
         android:src="@drawable/ico_back" />
 

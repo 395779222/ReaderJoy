@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
- 	 android:background="@color/white" 
+ 	 android:background="#f9f9f9" 
     tools:context="com.example.readerjoy.MainActivity" >
 
     <include layout="@layout/layout_head" 
@@ -14,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/header"
-        android:layout_above="@+id/gview_bottom_menu"
+        android:layout_above="@+id/line"
         android:scrollbars="none"
         android:soundEffectsEnabled="false" >
 	    <!-- 中间内容 -->
@@ -23,7 +24,12 @@
 	    android:layout_height="wrap_content"
 	    />
 	</ScrollView>
-
+	 <View
+	      android:id="@+id/line"
+	        android:layout_above="@+id/gview_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f3efe4"/>
     <GridView
         android:id="@+id/gview_bottom_menu"
         android:clipToPadding="true"

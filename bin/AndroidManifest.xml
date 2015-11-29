@@ -27,6 +27,27 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" >
         </activity>
+          <activity
+            android:name="com.example.readerjoy.activity.BookDetailActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.example.readerjoy.activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.example.readerjoy.activity.SearchActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+         <activity
+            android:name="com.example.readerjoy.activity.BookByActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" >
+        </activity>
+        
     </application>
 
 </manifest>

@@ -24,7 +24,7 @@ public class LocalBook extends SQLiteOpenHelper {
 		//创建本地阅读表
 		String sql3 = "CREATE TABLE localbook"+ "( bookName text not null, imgBookId text not null,"
 				+ "path text not null,author text not null,intrdoduction text not null,type text not null,money text not null,"
-				+ "isRead text not null)";
+				+ "isRead text not null,bookIsPurchase text not null)";
 		db.execSQL(sql2);
 		db.execSQL(sql3);
 		

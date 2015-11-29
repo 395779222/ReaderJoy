@@ -50,6 +50,8 @@ public class BookStore {
 			String[] bookTypes = activity.getResources().getStringArray(R.array.booktype);
 			String[] bookMoneys = activity.getResources().getStringArray(R.array.money);
 			String[] bookIntroductions = activity.getResources().getStringArray(R.array.bookintroductions);
+			String[] cateGoryTypes = activity.getResources().getStringArray(R.array.cateGoryTypes);
+			String[] bookIsPurchases = activity.getResources().getStringArray(R.array.bookIsPurchases);
 			for(int i=0;i<bookids.length;i++){
 				Book book = new Book();
 				book.setAuthor(bookauthors[i]);
@@ -59,6 +61,8 @@ public class BookStore {
 				book.setType(Integer.parseInt(bookTypes[i]));
 				book.setMoney(Integer.parseInt(bookMoneys[i]));
 				book.setIntrdoduction(bookIntroductions[i]);
+				book.setCateGoryType(Integer.parseInt(cateGoryTypes[i]));
+				book.setBookIsPurchase(0);
 				bookStore.list.add(book);
 			}
 			//初始化图书分类
@@ -97,7 +101,7 @@ public class BookStore {
 		if(bookStore.allJBYist==null){
 			bookStore.allJBYist = new ArrayList<Book>();
 			for(Book book:bookStore.list){
-				if(book.getType()==0){
+				if(book.getType()==1){
 					bookStore.allJBYist.add(book);
 				}
 			}
@@ -117,7 +121,7 @@ public class BookStore {
 		if(bookStore.allJPList==null){
 			bookStore.allJPList = new ArrayList<Book>();
 			for(Book book:bookStore.list){
-				if(book.getType()==1){
+				if(book.getType()==0){
 					bookStore.allJPList.add(book);
 				}
 			}
@@ -138,7 +142,7 @@ public class BookStore {
 		if(bookStore.mainBYList==null){
 			bookStore.mainBYList = new ArrayList<Book>();
 			for(Book book:bookStore.list){
-				if(book.getType()==0){
+				if(book.getType()==1){
 					bookStore.mainBYList.add(book);
 					if(bookStore.mainBYList.size()==6){
 						break;

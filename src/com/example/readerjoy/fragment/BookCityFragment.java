@@ -90,10 +90,10 @@ public class BookCityFragment extends Fragment{
 	* @throws 
 	*/ 
 	private void initAdapter() {
-		jpAdapter = new BookCaseAdapter(getActivity(),dataJPList);
+		jpAdapter = new BookCaseAdapter(getActivity(),dataJPList,false);
 		gview_jptj.setAdapter(jpAdapter);
 		
-		byAdapter = new BookCaseAdapter(getActivity(),dataBYList);
+		byAdapter = new BookCaseAdapter(getActivity(),dataBYList,false);
 		gview_byzq.setAdapter(byAdapter);
 		
 	}

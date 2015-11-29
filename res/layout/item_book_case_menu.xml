@@ -2,18 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#f9f9f9"
     android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/book_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/img_book"
-        android:layout_centerHorizontal="true"
-        android:maxLines="2"
-        android:text="都破残穷 "
-        android:textColor="@color/dark" />
 
     <ImageView
         android:id="@+id/img_book"
@@ -22,6 +12,38 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:background="@drawable/book0" />
+        android:src="@drawable/book0" />
+
+    <TextView
+        android:id="@+id/book_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/img_book"
+        android:layout_below="@+id/img_book"
+        
+        android:maxLines="2"
+        android:text="都破残穷 "
+        android:textColor="@color/dark" />
+
+     <TextView
+         android:id="@+id/book_status"
+         android:layout_width="84dp"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/book_name"
+         android:background="#bbbbbb"
+          android:layout_centerHorizontal="true"
+         android:text="已完结 "
+         android:textColor="@color/dark" />
+
+     <ImageView
+         android:id="@+id/img_selected"
+         android:layout_width="25dp"
+         android:layout_height="25dp"
+         android:visibility="gone"
+         android:layout_marginRight="5dp"
+         android:layout_marginBottom="2dp"
+         android:layout_above="@+id/book_name"
+         android:layout_alignRight="@+id/img_book"
+         android:background="@drawable/img_selected" />
 
 </RelativeLayout>

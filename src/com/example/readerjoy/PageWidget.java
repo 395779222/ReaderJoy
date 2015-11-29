@@ -33,6 +33,8 @@ public class PageWidget extends View {
 	Bitmap mNextPageBitmap = null;
 
 	PointF mTouch = new PointF(); // 拖拽点
+	PointF mTouchEnd = new PointF(); // 拖拽点
+	
 	PointF mBezierStart1 = new PointF(); // 贝塞尔曲线起始点
 	PointF mBezierControl1 = new PointF(); // 贝塞尔曲线控制点
 	PointF mBeziervertex1 = new PointF(); // 贝塞尔曲线顶点
@@ -67,7 +69,7 @@ public class PageWidget extends View {
 
 	Paint mPaint;
 	Scroller mScroller;
-
+	
 	public PageWidget(Context context, int width, int height) {
 		super(context);
 		mPath0 = new Path();
@@ -113,33 +115,32 @@ public class PageWidget extends View {
 		else
 			mIsRTandLB = false;
 	}
-
-	public boolean doTouchEvent(MotionEvent event) {
-
-		if (event.getAction() == MotionEvent.ACTION_MOVE) {
-			mTouch.x = event.getX();
-			mTouch.y = event.getY();
-			this.postInvalidate();
-		}
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			mTouch.x = event.getX();
-			mTouch.y = event.getY();
-			// calcCornerXY(mTouch.x, mTouch.y);
-			// this.postInvalidate();
-		}
-		if (event.getAction() == MotionEvent.ACTION_UP) {
-			// if (canDragOver()) {
-			// startAnimation(1200);
-			// } else {
-			// mTouch.x = mCornerX - 10f;
-			// mTouch.y = mCornerY - 10f;
-			// }
-			// 直接画出动画而不使用时上面的条件判断
-			startAnimation(1200);
-			this.postInvalidate();
-		}
-		// return super.onTouchEvent(event);
+	public boolean doTouchEventDown(MotionEvent event) {
+		mTouch.x = event.getX();
+		mTouch.y = event.getY();
+		abortAnimation();
+		calcCornerXY(event.getX(),event.getY());
 		return true;
+	}
+	
+	public int doTouchEventUp(MotionEvent event) {
+		//这个判断用不到的
+		mTouchEnd.x = event.getX();
+		mTouchEnd.y = event.getY();
+		if(mTouchEnd.x-mTouch.x==0&&mTouchEnd.y-mTouch.y==0){
+			return 0;
+		}
+		//右滑左翻
+		else if((mTouchEnd.x-mTouch.x)>0){
+			return -1;
+		}else{
+			return 1;
+		}
+		// 直接画出动画而不使用时上面的条件判断
+		//startAnimation(1200);
+		//页面更新,会调用onDraw()l
+		//this.postInvalidate();
+		//return true;
 	}
 
 	/**
@@ -312,11 +313,14 @@ public class PageWidget extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.drawColor(0xFFAAAAAA);
-		calcPoints();
+		//绘制翻页的切面
+		//calcPoints();
 		drawCurrentPageArea(canvas, mCurPageBitmap, mPath0);
 		drawNextPageAreaAndShadow(canvas, mNextPageBitmap);
-		drawCurrentPageShadow(canvas);
-		drawCurrentBackArea(canvas, mCurPageBitmap);
+		//绘制翻起的阴影
+		//drawCurrentPageShadow(canvas);
+		//绘制翻起的背面
+		//drawCurrentBackArea(canvas, mCurPageBitmap);
 	}
 
 	/**
@@ -539,7 +543,7 @@ public class PageWidget extends View {
 		}
 	}
 
-	private void startAnimation(int delayMillis) {
+	public void startAnimation(int delayMillis) {
 		int dx, dy;
 		// dx 水平方向滑动的距离，负值会使滚动向左滚动
 		// dy 垂直方向滑动的距离，负值会使滚动向上滚动

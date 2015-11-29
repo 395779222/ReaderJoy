@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.example.readerjoy.BookPageFactory;
+import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.PageWidget;
 import com.example.readerjoy.R;
+import com.example.readerjoy.base.widget.CustomToast;
 import com.example.readerjoy.dialog.MarkDialog;
+import com.example.readerjoy.entity.Book;
+import com.example.readerjoy.fragment.BookcaseFragment;
 import com.example.readerjoy.helper.MarkHelper;
 import com.example.readerjoy.vo.MarkVo;
 
@@ -32,14 +36,17 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -54,7 +61,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	private static String word = "";// 记录当前页面的文字
 	private int a = 0, b = 0;// 记录toolpop的位置
 	private TextView bookBtn1, bookBtn2, bookBtn3, bookBtn4;
-	private String bookPath;// 记录读入书的路径
+	private Book book;
 	private String ccc = null;// 记录是否为快捷方式调用
 	protected long count = 1;
 	private SharedPreferences.Editor editor;
@@ -71,6 +78,13 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	private Context mContext = null;
 	private PageWidget mPageWidget;
 	private PopupWindow mPopupWindow, mToolpop, mToolpop1, mToolpop2, mToolpop3, mToolpop4;
+	//头部
+	PopupWindow popupWindowHeader = null; 
+	View winPopView;
+	private ImageView btnExit_winpop;
+	TextView tvTitle_winpop;
+	ImageView rightDelete_winpop;
+	
 	protected int PAGE = 1;
 	private BookPageFactory pagefactory;
 	private View popupwindwow, toolpop, toolpop1, toolpop2, toolpop3, toolpop4;
@@ -82,8 +96,11 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	private int size = 30; // 字体大小
 	private SharedPreferences sp;
 	int defaultSize = 0;
-	// 实例化Handler
 	
+	boolean isBY = false;
+	boolean bookIsPurchase = false;
+	boolean isLogin;
+	// 实例化Handler
 	public Handler mHandler = new Handler() {
 		// 接收子线程发来的消息，同时更新UI
 		public void handleMessage(Message msg) {
@@ -154,15 +171,17 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		// 夜间模式按钮
 		case R.id.imageBtn2:
 			if (isNight) {
-				pagefactory.setM_textColor(Color.rgb(28, 28, 28));
+				pagefactory.setM_textColor(Color.parseColor("#555555"));
 				imageBtn2.setImageResource(R.drawable.reader_switch_off);
 				isNight = false;
-				pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.bg));
+				pagefactory.setNight(false);
+				//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.color.white));
 			} else {
 				pagefactory.setM_textColor(Color.rgb(128, 128, 128));
 				imageBtn2.setImageResource(R.drawable.reader_switch_on);
 				isNight = true;
-				pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
+				pagefactory.setNight(true);
+				//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
 			}
 			setLight();
 			pagefactory.setM_mbBufBegin(begin);
@@ -175,7 +194,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			try {
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm ss");
 				String time = sf.format(new Date());
-				db.execSQL("insert into markhelper (path ,begin,word,time) values (?,?,?,?)", new String[] { bookPath, begin + "", word, time });
+				db.execSQL("insert into markhelper (path ,begin,word,time) values (?,?,?,?)", new String[] { book.getPath(), begin + "", word, time });
 				db.close();
 				Toast.makeText(ReadActivity.this, "书签添加成功", Toast.LENGTH_SHORT).show();
 			} catch (SQLException e) {
@@ -190,7 +209,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		case R.id.imageBtn3_2:
 			SQLiteDatabase dbSelect = markhelper.getReadableDatabase();
 			String col[] = { "begin", "word", "time" };
-			Cursor cur = dbSelect.query("markhelper", col, "path = '" + bookPath + "'", null, null, null, null);
+			Cursor cur = dbSelect.query("markhelper", col, "path = '" + book.getPath() + "'", null, null, null, null);
 			Integer num = cur.getCount();
 			if (num == 0) {
 				Toast.makeText(ReadActivity.this, "您还没有书签", Toast.LENGTH_SHORT).show();
@@ -202,7 +221,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 					int b1 = cur.getInt(cur.getColumnIndex("begin"));
 					int p = 0;
 					int count = 10;
-					MarkVo mv = new MarkVo(s1, p, count, b1, s2, bookPath);
+					MarkVo mv = new MarkVo(s1, p, count, b1, s2, book.getPath());
 					markList.add(mv);
 				}
 				mDialog = new MarkDialog(this, markList, mHandler, R.style.FullHeightDialog);
@@ -256,27 +275,36 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		rlayout.addView(mPageWidget);
 
 		Intent intent = getIntent();
-		bookPath = intent.getStringExtra("bookPath");
+		book = (Book) intent.getSerializableExtra("book");
 		ccc = intent.getStringExtra("ccc");
-
 		mPageWidget.setBitmaps(mCurPageBitmap, mCurPageBitmap);
+		// 提取记录在sharedpreferences的各种状态
+		sp = getSharedPreferences("config", MODE_PRIVATE);
+		editor = sp.edit();
+		getSize();// 获取配置文件中的size大小
+		getLight();// 获取配置文件中的light值
+		count = sp.getLong(book.getPath() + "count", 1);
+		//获取是否是包月
+		isBY = sp.getBoolean("isBY", false);
+		//该本书是否已经被购买
+		bookIsPurchase = sp.getBoolean(book.getPath()+"bookIsPurchase", false); 	
+		isLogin = sp.getBoolean("isLogin", false); 	
 		
 		mPageWidget.setOnTouchListener(new OnTouchListener() {
 			@SuppressLint("WrongCall")
 			@Override
 			public boolean onTouch(View v, MotionEvent e) {
-				boolean ret = false;
 				if (v == mPageWidget) {
 					if (!show) {
-
-						if (e.getAction() == MotionEvent.ACTION_DOWN) {
-							if (e.getY() > readHeight) {// 超出范围了，表示单击到广告条，则不做翻页
+						pagefactory.onDraw(mCurPageCanvas);
+						if (e.getAction() == MotionEvent.ACTION_DOWN) {		
+							mPageWidget.doTouchEventDown(e);
+						}else if(e.getAction() == MotionEvent.ACTION_UP){
+							int dragType = mPageWidget.doTouchEventUp(e);
+							if(dragType==0){
+								dealWinPop();
 								return false;
-							}
-							mPageWidget.abortAnimation();
-							mPageWidget.calcCornerXY(e.getX(), e.getY());
-							pagefactory.onDraw(mCurPageCanvas);
-							if (mPageWidget.DragToRight()) {// 左翻
+							}else if(dragType==-1){
 								try {
 									pagefactory.prePage();
 									begin = pagefactory.getM_mbBufBegin();// 获取当前阅读位置
@@ -288,8 +316,20 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 									Toast.makeText(mContext, "当前是第一页", Toast.LENGTH_SHORT).show();
 									return false;
 								}
+								//画下个页面
 								pagefactory.onDraw(mNextPageCanvas);
-							} else {// 右翻
+								mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
+								mPageWidget.startAnimation(1200);
+								//页面更新,会调用onDraw()l
+								mPageWidget.postInvalidate();
+							}else{
+								if(pagefactory.getfPercent()>0.05){
+									
+									if(!checkHasReadRole()){
+										return false;
+									}
+								}
+								
 								try {
 									pagefactory.nextPage();
 									begin = pagefactory.getM_mbBufBegin();// 获取当前阅读位置
@@ -302,41 +342,44 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 									return false;
 								}
 								pagefactory.onDraw(mNextPageCanvas);
+								mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
+								//mPageWidget.startAnimation(1200);
+								//页面更新,会调用onDraw()l
+								mPageWidget.postInvalidate();
 							}
-							mPageWidget.setBitmaps(mCurPageBitmap, mNextPageBitmap);
+							editor.putInt(book.getPath() + "begin", begin).commit();
 						}
-						editor.putInt(bookPath + "begin", begin).commit();
-						ret = mPageWidget.doTouchEvent(e);
-						return ret;
+							
 					}
-				}else{
-					closeWinPop();
+					else{
+						closeWinPop();
+						return false;
+					}
 				}
-				return false;
+				return true;
+	
 			}
+		
 		});
+		
 		setPop();
-		// 提取记录在sharedpreferences的各种状态
-		sp = getSharedPreferences("config", MODE_PRIVATE);
-		editor = sp.edit();
-		getSize();// 获取配置文件中的size大小
-		getLight();// 获取配置文件中的light值
-		count = sp.getLong(bookPath + "count", 1);
-
 		lp = getWindow().getAttributes();
 		lp.screenBrightness = light / 10.0f < 0.01f ? 0.01f : light / 10.0f;
 		getWindow().setAttributes(lp);
 		pagefactory = new BookPageFactory(screenWidth, readHeight);// 书工厂
+		
 		if (isNight) {
-			pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
+			//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
+			pagefactory.setNight(true);
 			pagefactory.setM_textColor(Color.rgb(128, 128, 128));
 		} else {
-			pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.bg));
-			pagefactory.setM_textColor(Color.rgb(28, 28, 28));
+			//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.color.white));
+			pagefactory.setNight(false);
+			pagefactory.setM_textColor(Color.parseColor("#555555"));
 		}
-		begin = sp.getInt(bookPath + "begin", 0);
+		begin = sp.getInt(book.getPath() + "begin", 0);
 		try {
-			pagefactory.openbook(bookPath, begin);// 从指定位置打开书籍，默认从开始打开
+			pagefactory.openbook(book.getPath(), begin);// 从指定位置打开书籍，默认从开始打开
 			pagefactory.setM_fontSize(size);
 			pagefactory.onDraw(mCurPageCanvas);
 		} catch (IOException e1) {
@@ -347,6 +390,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		markhelper = new MarkHelper(this);
 
 	}
+
 
 	@Override
 	protected void onDestroy() {
@@ -370,6 +414,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 					getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 					show = false;
 					mPopupWindow.dismiss();
+					popupWindowHeader.dismiss();
 				} else {
 					ReadActivity.this.finish();
 				}
@@ -394,20 +439,36 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
-			if (show) {
-				closeWinPop();
-
-			} else {
-
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-				getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-				show = true;
-
-				pop();
-			}
+			
+			dealWinPop();
+			
 		}
 
 		return super.onKeyUp(keyCode, event);
+	}
+
+	/** 
+	* @Title: dealWinPop 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param     设定文件 
+	* @date 2015年11月26日 上午10:59:49
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	private void dealWinPop() {
+		if (show) {
+			closeWinPop();
+
+		} else {
+
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+			show = true;
+
+			pop();
+		}
+		
 	}
 
 	/** 
@@ -423,6 +484,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		show = false;
 		mPopupWindow.dismiss();
+		popupWindowHeader.dismiss();
 		popDismiss();
 	}
 
@@ -450,7 +512,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			int s = seekBar4.getProgress();
 			markEdit4.setText(s + "%");
 			begin = (pagefactory.getM_mbBufLen() * s) / 100;
-			editor.putInt(bookPath + "begin", begin).commit();
+			editor.putInt(book.getPath() + "begin", begin).commit();
 			pagefactory.setM_mbBufBegin(begin);
 			pagefactory.setM_mbBufEnd(begin);
 			try {
@@ -483,7 +545,8 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	 * popupwindow的弹出,工具栏
 	 */
 	public void pop() {
-
+		mPopupWindow.setFocusable(false);
+		mPopupWindow.setTouchable(true); // 设置PopupWindow可触摸
 		mPopupWindow.showAtLocation(mPageWidget, Gravity.BOTTOM, 0, 0);
 		bookBtn1 = (TextView) popupwindwow.findViewById(R.id.bookBtn1);
 		bookBtn2 = (TextView) popupwindwow.findViewById(R.id.bookBtn2);
@@ -493,6 +556,8 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		bookBtn2.setOnClickListener(this);
 		bookBtn3.setOnClickListener(this);
 		bookBtn4.setOnClickListener(this);
+		
+		popupWindowHeader.showAtLocation(findViewById(R.id.relativeLayout_parent), Gravity.TOP,0, 50);
 	}
 
 	/**
@@ -531,6 +596,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		popupwindwow = this.getLayoutInflater().inflate(R.layout.bookpop, null);
 		toolpop = this.getLayoutInflater().inflate(R.layout.toolpop, null);
 		mPopupWindow = new PopupWindow(popupwindwow, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
 		mToolpop = new PopupWindow(toolpop, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		toolpop1 = this.getLayoutInflater().inflate(R.layout.tool11, null);
 		mToolpop1 = new PopupWindow(toolpop1, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -540,6 +606,8 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		mToolpop3 = new PopupWindow(toolpop3, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 		toolpop4 = this.getLayoutInflater().inflate(R.layout.tool44, null);
 		mToolpop4 = new PopupWindow(toolpop4, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		
+		creatPopupWindowHeader();
 	}
 
 	/**
@@ -639,9 +707,11 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 				seekBar2.setProgress(light);
 
 				if (isNight) {
-					pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
+					//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.main_bg));
+					pagefactory.setNight(true);
 				} else {
-					pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.bg));
+					pagefactory.setNight(false);
+					//pagefactory.setBgBitmap(BitmapFactory.decodeResource(this.getResources(), R.color.white));
 				}
 
 				if (isNight) {
@@ -712,5 +782,110 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	protected void onResume() {
 		super.onResume();
 	}
+	
+	private boolean checkHasReadRole(){
+		if(book.getType()==1){
+			if(isLogin){
+				if(isBY){
+					return true;
+				}
+				else{
+					if(bookIsPurchase){
+						return true;
+					}
+					else{
+						CustomToast.getInstance(ReadActivity.this).showToast("您尚未购买此书");
+						jumpToPuchase();
+						return false;
+					}
+				}
+			}
+			else{
+				CustomToast.getInstance(ReadActivity.this).showToast("您尚未登录");
+				jumpToLogin();
+				return false;
+			}
+		}
+		else{
+			return true;
+		}
+		
+	}
+	
+	private void jumpToLogin() {
+		//登陆成功跳转到主页
+		Intent mIntent = new Intent(ReadActivity.this,LoginActivity.class); 
+		mIntent.putExtra("isLoginPage", true);
+		startActivity(mIntent);
+		finish();
+	}
 
+	private void jumpToPuchase(){
+		//登陆成功跳转到主页
+		Intent mIntent = new Intent(ReadActivity.this,BookByActivity.class); 
+		Bundle mBundle = new Bundle();     
+        mBundle.putSerializable("book",book);   
+        mIntent.putExtras(mBundle); 
+		startActivity(mIntent);
+		finish();
+	}
+
+	private void creatPopupWindowHeader(){
+		LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		winPopView = layoutInflater.inflate(R.layout.edit_book_case_header, null);
+		winPopView.setBackgroundResource(R.color.read_head_pop);
+	    btnExit_winpop = (ImageView) winPopView.findViewById(R.id.btnExit_winpop);
+	    tvTitle_winpop = (TextView) winPopView.findViewById(R.id.tvTitle_winpop);
+	    tvTitle_winpop.setText(book.getBookName());
+	    rightDelete_winpop = (ImageView) winPopView.findViewById(R.id.rightDelete_winpop);
+	    rightDelete_winpop.setVisibility(View.GONE);
+		popupWindowHeader = new PopupWindow(winPopView,LayoutParams.FILL_PARENT,100);
+		//popupWindowHeader.showAtLocation(mPageWidget, Gravity.TOP, 0, 0);
+		// 使其聚集
+		popupWindowHeader.setFocusable(false);
+		popupWindowHeader.setTouchable(true); // 设置PopupWindow可触摸
+		// 设置允许在外点击消失
+		popupWindowHeader.setOutsideTouchable(true);
+		//popupWindowHeader.showAtLocation(findViewById(R.id.relativeLayout_parent), Gravity.TOP,0, 50);
+		//popupWindowHeader.setBackgroundDrawable(new BitmapDrawable());
+		//popupWindowHeader.showAsDropDown(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), xPos, 0);
+		initPopEvent();
+	}
+	/** 
+	* @Title: initPopEvent 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param     设定文件 
+	* @date 2015年11月25日 下午12:29:48
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	private void initPopEvent(){
+		//popupWindowHeader后退执行的操作
+		if(btnExit_winpop!=null){
+			btnExit_winpop.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(popupWindowHeader!=null){
+						//登陆成功跳转到主页
+						Intent mIntent = new Intent(ReadActivity.this,MainActivity.class); 
+						startActivity(mIntent);
+					}
+									}
+			});
+		}
+		if(rightDelete_winpop!=null){
+			rightDelete_winpop.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(popupWindowHeader!=null){
+						popupWindowHeader.dismiss();
+					
+					}
+				
+				}
+			});
+			
+		}
+	}
 }

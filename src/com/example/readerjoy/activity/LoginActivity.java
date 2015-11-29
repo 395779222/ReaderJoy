@@ -56,7 +56,7 @@ public class LoginActivity extends BaseActivity{
 	public void bindWidget() {
 		setContentView(R.layout.activity_login);
 		btn_login = (Button) findViewById(R.id.btn_login);
-		sp = getSharedPreferences("mark", MODE_PRIVATE);
+		sp = getSharedPreferences("config", MODE_PRIVATE);
 		isLogin = sp.getBoolean("isLogin", false);
 		name =  (EditText) findViewById(R.id.name);
 		password =  (EditText) findViewById(R.id.password);
@@ -145,7 +145,11 @@ public class LoginActivity extends BaseActivity{
 		else{
 			while (cur.moveToNext()) {
 				String userType = cur.getString(cur.getColumnIndex("isBY"));
-				sp.edit().putString("isBY", userType).commit();
+				if(userType.equals("0")){
+					sp.edit().putBoolean("isBY", false).commit();
+				}else{
+					sp.edit().putBoolean("isBY", true).commit();
+				}
 			}
 			sp.edit().putBoolean("isLogin", true).commit();
 			sp.edit().putString("name", name.getText().toString()).commit();

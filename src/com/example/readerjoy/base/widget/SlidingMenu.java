@@ -1,5 +1,6 @@
 package com.example.readerjoy.base.widget;
 
+import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.R;
 
 import android.app.Activity;
@@ -105,7 +106,9 @@ public class SlidingMenu extends RelativeLayout {
 		super.scrollTo(x, y);
 		postInvalidate();
 	}
-
+	/*重写computeScroll()的原因
+	调用startScroll()是不会有滚动效果的，只有在computeScroll()获取滚动情况，做出滚动的响应
+	computeScroll在父控件执行drawChild时，会调用这个方法*/
 	@Override
 	public void computeScroll() {
 		if (!mScroller.isFinished()) {
@@ -116,6 +119,12 @@ public class SlidingMenu extends RelativeLayout {
 				int y = mScroller.getCurrY();
 				if (oldX != x || oldY != y) {
 					if (mSlidingView != null) {
+						/**  scrollTo()方法就是将一个视图移动到指定位置，
+						 * 偏移量 mScrollX、mScrollY就是视图初始位置的距离，默认是情况下当然是0。
+						 * 如果视图要发生移动，比如要移动到（x，y），首先要检查这个点的坐标是否和偏移量一样，
+						 * 因为 scrollTo()是移动到指定的点，如果这次移动的点的坐标和上次偏移量一样，
+						 * 也就是说这次移动和上次移动的坐标是同一个，那么就没有必要进行移动了
+						 */
 						mSlidingView.scrollTo(x, y);
 					}
 				}
@@ -132,8 +141,12 @@ public class SlidingMenu extends RelativeLayout {
 	}
 
 	/* 拦截touch事件 */
+	/*重点onInterceptTouchEvent这个事件是从父控件开始往子控件传的，
+	 * 直到有拦截或者到没有这个事件的view，然后就往回从子到父控件，这次是onTouch的
+	 * 一但返回True（代表事件在当前的viewGroup中会被处理）*/
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		MainActivity activity = (MainActivity) context;
 		final int action = ev.getAction();
 		final float x = ev.getX();
 		final float y = ev.getY();
@@ -142,25 +155,45 @@ public class SlidingMenu extends RelativeLayout {
 			mLastMotionX = x;
 			mLastMotionY = y;
 			mIsBeingDragged = false;
-			if (canSlideLeft) {
+			//若是可以显示左侧
+			if (canSlideLeft&&activity.isBookCase()) {
 				mMenuView.setVisibility(View.VISIBLE);
 			}
 			break;
 
 		case MotionEvent.ACTION_MOVE:
+			if(activity.isEdit()){
+				return false;
+			}
 			float dx = x - mLastMotionX;
+			//Math.abs取绝对值
 			final float xDiff = Math.abs(dx);
 			final float yDiff = Math.abs(y - mLastMotionY);
+			//如果做滑动，且滑动小于45
 			if (xDiff > mTouchSlop && xDiff > yDiff) {
 				if (canSlideLeft) {
 					float oldScrollX = mSlidingView.getScrollX();
 					if (oldScrollX < 0) {
 						mIsBeingDragged = true;
 						mLastMotionX = x;
-					} else {
+					} 
+					else {
+						//若是向右滑动
 						if (dx > 0) {
-							mIsBeingDragged = true;
-							mLastMotionX = x;
+							if(!activity.isBookCase()){
+								activity.updateFragment("bookCase");
+								return false;
+							}
+							else{
+								mIsBeingDragged = true;
+								mLastMotionX = x;
+							}
+						}
+						//若是向左滑动
+						else if(dx<0){
+							//跳转到书城页面
+							activity.updateFragment("back");
+							mIsBeingDragged = false;
 						}
 					}
 				}
@@ -174,14 +207,15 @@ public class SlidingMenu extends RelativeLayout {
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
 		if (mVelocityTracker == null) {
+			//主要用跟踪触摸屏事件（flinging事件和其他gestures手势事件）的速率。
 			mVelocityTracker = VelocityTracker.obtain();
 		}
 		mVelocityTracker.addMovement(ev);
 		final int action = ev.getAction();
 		final float x = ev.getX();
 		final float y = ev.getY();
-		switch (action) {
-		case MotionEvent.ACTION_DOWN:
+		
+		if(action == MotionEvent.ACTION_DOWN){
 			if (!mScroller.isFinished()) {
 				mScroller.abortAnimation();
 			}
@@ -191,8 +225,7 @@ public class SlidingMenu extends RelativeLayout {
 					&& mLastMotionX < getMenuViewWidth()) {
 				return false;
 			}
-			break;
-		case MotionEvent.ACTION_MOVE:
+		}else if(action == MotionEvent.ACTION_MOVE){
 			if (mIsBeingDragged) {
 				final float deltaX = mLastMotionX - x;
 				mLastMotionX = x;
@@ -222,9 +255,8 @@ public class SlidingMenu extends RelativeLayout {
 				}
 
 			}
-			break;
-		case MotionEvent.ACTION_CANCEL:
-		case MotionEvent.ACTION_UP:
+		}
+		if(action == MotionEvent.ACTION_UP){
 			if (mIsBeingDragged) {
 				final VelocityTracker velocityTracker = mVelocityTracker;
 				velocityTracker.computeCurrentVelocity(100);
@@ -232,6 +264,7 @@ public class SlidingMenu extends RelativeLayout {
 				int oldScrollX = mSlidingView.getScrollX();
 				int dx = 0;
 				if (oldScrollX <= 0 && canSlideLeft) {// left view
+					
 					if (xVelocity > VELOCITY) {
 						dx = -getMenuViewWidth() - oldScrollX;
 					} else if (xVelocity < -VELOCITY) {
@@ -257,8 +290,8 @@ public class SlidingMenu extends RelativeLayout {
 				}
 				smoothScrollTo(dx);
 			}
-			break;
 		}
+		
 		return true;
 	}
 
@@ -281,7 +314,6 @@ public class SlidingMenu extends RelativeLayout {
 	/*
 	 * 显示左侧边的view
 	 */
-
 	public void showLeftView() {
 		int menuWidth = mMenuView.getWidth();
 		int oldScrollX = mSlidingView.getScrollX();

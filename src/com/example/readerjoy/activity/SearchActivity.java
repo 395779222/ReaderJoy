@@ -112,7 +112,7 @@ public class SearchActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				changeGridViewBook();
-				gridAdapter = new BookCaseAdapter(SearchActivity.this,gridBoolList);
+				gridAdapter = new BookCaseAdapter(SearchActivity.this,gridBoolList,false);
 				gview_book.setAdapter(gridAdapter);
 			}
 		});
@@ -174,7 +174,7 @@ public class SearchActivity extends BaseActivity {
 	@Override
 	public void bindAdapter() {
 		changeGridViewBook();
-		gridAdapter = new BookCaseAdapter(this,gridBoolList);
+		gridAdapter = new BookCaseAdapter(this,gridBoolList,false);
 		gview_book.setAdapter(gridAdapter);
 		
 	}

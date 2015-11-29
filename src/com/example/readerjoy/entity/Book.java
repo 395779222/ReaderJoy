@@ -11,11 +11,28 @@ public class Book implements Serializable{
 	private String intrdoduction="暂无介绍";
 	private int type = 0;//0:精品推荐，1：包月专区
 	private int money = 0;//包月钱
+	private int cateGoryType  = 0;
+	private int  bookIsPurchase;////0:未购买，1：已购买
+	
+	private boolean isSelected = false;
+	private boolean isEditStatue = false;
 	
 	
+	public boolean isEditStatue() {
+		return isEditStatue;
+	}
+	public void setEditStatue(boolean isEditStatue) {
+		this.isEditStatue = isEditStatue;
+	}
+	public boolean isSelected() {
+		return isSelected;
+	}
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
+	}
 	public String getIntrdoduction() {
 		return intrdoduction;
-	}
+	} 
 	public void setIntrdoduction(String intrdoduction) {
 		this.intrdoduction = intrdoduction;
 	}
@@ -54,6 +71,18 @@ public class Book implements Serializable{
 	}
 	public void setPath(String path) {
 		this.path = path;
+	}
+	public int getCateGoryType() {
+		return cateGoryType;
+	}
+	public void setCateGoryType(int cateGoryType) {
+		this.cateGoryType = cateGoryType;
+	}
+	public int getBookIsPurchase() {
+		return bookIsPurchase;
+	}
+	public void setBookIsPurchase(int bookIsPurchase) {
+		this.bookIsPurchase = bookIsPurchase;
 	}
 	
 	
