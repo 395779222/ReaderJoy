@@ -45,11 +45,13 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -122,6 +124,7 @@ public class MainActivity extends BaseActivity {
 		if (!isInit) {
 			new AsyncSetApprove().execute("");
 		}
+		
 	}
 
 	
@@ -269,27 +272,7 @@ public class MainActivity extends BaseActivity {
 		rightText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(rightText.getText().equals("编辑")){
-					if(!winPopHeaderIsShow){
-						if(popupWindowHeader==null){
-							creatPopupWindowHeader();
-							((BookcaseFragment)fragment).editBookCase();
-							isEdit = true;
-							winPopHeaderIsShow = true;
-							//popupWindowHeader.dismiss();
-							
-						}else{
-							popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.TOP,
-									0, 50);
-							((BookcaseFragment)fragment).editBookCase();
-							isEdit = true;
-							winPopHeaderIsShow = true;
-							
-						}
-						
-					}
-				}
-				isEdit = true;
+				bookCaseEdit();
 			}
 		});
 	}
@@ -415,7 +398,7 @@ public class MainActivity extends BaseActivity {
 			fragment = new BookListFragment();
 			listToShowByType = BookStore.getInstance(MainActivity.this).getAllBYBook();
 			tvTitle.setText("包月专区");
-			rightText.setVisibility(View.VISIBLE);
+			rightText.setVisibility(View.GONE);
 			showSecond();
 		}
 		//书城内点击精品专区
@@ -524,6 +507,7 @@ public class MainActivity extends BaseActivity {
 		winPopView = layoutInflater.inflate(R.layout.edit_book_case_header, null);
 	    btnExit_winpop = (ImageView) winPopView.findViewById(R.id.btnExit_winpop);
 	    tvTitle_winpop = (TextView) winPopView.findViewById(R.id.tvTitle_winpop);
+	    tvTitle_winpop.setText("选中了0项");
 	    rightDelete_winpop = (ImageView) winPopView.findViewById(R.id.rightDelete_winpop);
 		popupWindowHeader = new PopupWindow(winPopView,LayoutParams.FILL_PARENT,100);
 		//popupWindowHeader.showAtLocation(mPageWidget, Gravity.TOP, 0, 0);
@@ -532,8 +516,8 @@ public class MainActivity extends BaseActivity {
 		popupWindowHeader.setTouchable(true); // 设置PopupWindow可触摸
 		// 设置允许在外点击消失
 		popupWindowHeader.setOutsideTouchable(true);
-		popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.TOP,
-				0, 50);
+		popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.NO_GRAVITY,
+				0, 0);
 		//popupWindowHeader.setBackgroundDrawable(new BitmapDrawable());
 		//popupWindowHeader.showAsDropDown(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), xPos, 0);
 		initPopEvent();
@@ -598,6 +582,40 @@ public class MainActivity extends BaseActivity {
 			tvTitle_winpop.setText("选中了"+num+" 项");
 		}
 	}
+	/** 
+	* @Title: bookCaseEdit 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param     设定文件 
+	* @date 2015年11月29日 下午8:44:02
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	public void bookCaseEdit() {
+		if(rightText.getText().equals("编辑")){
+			if(fragment!=null&&fragment.getClass().getSimpleName().equals("BookcaseFragment")){
+				if(!winPopHeaderIsShow){
+					if(popupWindowHeader==null){
+						creatPopupWindowHeader();
+						((BookcaseFragment)fragment).editBookCase();
+						isEdit = true;
+						winPopHeaderIsShow = true;
+						//popupWindowHeader.dismiss();
+						
+					}else{
+						popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.TOP,
+								0, 0);
+						((BookcaseFragment)fragment).editBookCase();
+						isEdit = true;
+						winPopHeaderIsShow = true;
+						
+					}
+					
+				}
+			}
+		
+		}
+	}
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -632,4 +650,14 @@ public class MainActivity extends BaseActivity {
 		this.isEdit = isEdit;
 	}
 	
+	/**
+	 * 禁止返回键
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

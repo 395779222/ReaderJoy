@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -38,6 +39,8 @@ import android.widget.TextView;
 
 public class LoginActivity extends BaseActivity{
 	Button btn_login;
+	TextView tvTitle;
+	ImageView btnExit;
 	private SharedPreferences sp;
 	private boolean isLogin;
 	private EditText name;
@@ -56,6 +59,8 @@ public class LoginActivity extends BaseActivity{
 	public void bindWidget() {
 		setContentView(R.layout.activity_login);
 		btn_login = (Button) findViewById(R.id.btn_login);
+		tvTitle = (TextView) findViewById(R.id.tvTitle);
+		btnExit = (ImageView) findViewById(R.id.btnExit);
 		sp = getSharedPreferences("config", MODE_PRIVATE);
 		isLogin = sp.getBoolean("isLogin", false);
 		name =  (EditText) findViewById(R.id.name);
@@ -74,6 +79,12 @@ public class LoginActivity extends BaseActivity{
 	*/ 
 	@Override
 	public void bindWidgetEevent() {
+		btnExit.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		// 精品推荐
 		btn_login.setOnClickListener(new OnClickListener() {
 			@Override
@@ -91,6 +102,7 @@ public class LoginActivity extends BaseActivity{
 			public void onClick(View v) {
 				isLoginPage = false;
 				btn_login.setText("注册");
+				tvTitle.setText("注册");
 				text_register.setVisibility(View.GONE);
 			}
 		});
@@ -186,8 +198,10 @@ public class LoginActivity extends BaseActivity{
 				password.setText(sp.getString("password", ""));
 			}
 			btn_login.setText("登陆");
+			tvTitle.setText("登陆");
 		}else{
 			btn_login.setText("注册");
+			tvTitle.setText("注册");
 			text_register.setVisibility(View.GONE);
 		}
 		

@@ -21,8 +21,8 @@
 	    <EditText 
          android:id="@+id/name"
          android:layout_width="240dp"
-         android:layout_height="75dp"
-         android:textSize="24dp"
+         android:layout_height="60dp"
+         android:textSize="20dp"
          android:hint="手机号"
          android:layout_centerHorizontal="true"
          android:background="@null"
@@ -38,10 +38,10 @@
 	     <EditText 
 	         android:id="@+id/password"
 	         android:layout_width="240dp"
-	         android:layout_height="75dp"
+	         android:layout_height="60dp"
 	         android:layout_below="@+id/line"
 	         android:hint="密码"
-	         android:textSize="24dp"
+	         android:textSize="20dp"
 	         android:background="@null"
 	         android:layout_centerHorizontal="true"
 	         />
@@ -59,13 +59,13 @@
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:background="@drawable/corners_btn_bg_selected"
             android:text="登陆"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/text_forget"

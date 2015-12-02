@@ -19,7 +19,7 @@
 		 <EditText 
 	         android:id="@+id/ed_search"
 	         android:layout_width="170dp"
-	         android:layout_height="40dp"
+	         android:layout_height="35dp"
 	         android:layout_marginLeft="10dp"
 	         android:hint="书名/作者"
 	         android:background="@drawable/edit_bk"
@@ -27,7 +27,7 @@
 	     <Button
 	         android:id="@+id/btn_search"
 	         android:layout_width="80dp"
-	         android:layout_height="40dp"
+	         android:layout_height="35dp"
 	         android:layout_toRightOf="@+id/ed_search"
 	         android:layout_marginLeft="25dp"
 	         android:background="@drawable/corners_btn_bg_selected"
@@ -58,7 +58,7 @@
 	    	        android:layout_marginTop="15dp"
 	    	        android:text="大家都在搜："
 	    	        android:textColor="#555555"
-	    	        android:textSize="20sp" />
+	    	        android:textSize="16sp" />
 	    	    
 				  <TextView
 				    android:id="@+id/text_change"
@@ -70,7 +70,7 @@
 	    	        android:text="&lt;换一批>"
 	    	        android:layout_marginRight="15dp"
 	    	        android:textColor="#555555"
-	    	        android:textSize="20sp" />
+	    	        android:textSize="16sp" />
 			  </RelativeLayout>
     	    <com.example.readerjoy.base.widget.GridViewForScrollView
     	        android:id="@+id/gview_book"

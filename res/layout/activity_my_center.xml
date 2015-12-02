@@ -27,7 +27,7 @@
 	      	 android:layout_marginTop="25dp"
 	        android:textColor="#555555"
 	        android:layout_centerHorizontal="true"
-	        android:textSize="24dp"
+	        android:textSize="20dp"
 	        android:text="18113890098" />
         
         <Button

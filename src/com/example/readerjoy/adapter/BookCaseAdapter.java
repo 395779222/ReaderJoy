@@ -97,6 +97,15 @@ public class BookCaseAdapter extends BaseAdapter{
 		* @throws 
 		*/ 
 		private void initEvent() {
+			img_book.setOnLongClickListener(new View.OnLongClickListener() {
+	            @Override
+	            public boolean onLongClick(View v) {
+	            	((MainActivity) activity).bookCaseEdit();
+					return isCase;
+	            	
+	            }
+	        });
+	            
 			// 精品推荐
 			img_book.setOnClickListener(new OnClickListener() {
 				@Override

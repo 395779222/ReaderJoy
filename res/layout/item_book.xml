@@ -22,15 +22,15 @@
     		android:layout_height="wrap_content"
     		android:layout_toRightOf="@+id/img_book"
     		android:orientation="vertical"
-    		android:layout_marginLeft="40dp"
+    		android:layout_marginLeft="20dp"
     		>
        		   <TextView
 			        android:id="@+id/book_name"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			      	android:maxLines="2"	
-			        android:textColor="@color/dark"
-			        android:textSize="18dp"
+			        android:textColor="#555555"
+			        android:textSize="16dp"
 			        android:text="都破残穷 " />
        		   
        		   <TextView
@@ -38,8 +38,8 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			      	android:maxLines="1"	
-			         android:layout_marginTop="15dp"
-			        android:textColor="@color/dark"
+			         android:layout_marginTop="14dp"
+			        android:textColor="#999999"
 			        android:textSize="14dp"
 			        android:text="[中国]天蚕土豆" />
        		   
@@ -48,8 +48,8 @@
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			         android:layout_marginTop="10dp"
-			        android:textColor="@color/dark"
-			        android:textSize="14dp"
+			        android:textColor="#999999"
+			        android:textSize="13dp"
 			        android:text="状态：完结" />
        		   
        		   <TextView
@@ -58,8 +58,8 @@
 			        android:layout_height="wrap_content"
 			      	android:maxLines="2"	
 			      	 android:layout_marginTop="10dp"
-			        android:textColor="@color/dark"
-			        android:textSize="14dp"
+			        android:textColor="#999999"
+			        android:textSize="13dp"
 			        android:text="都破残穷我试图伤心啊时间啊啊看" />
    		</LinearLayout>
    </RelativeLayout>

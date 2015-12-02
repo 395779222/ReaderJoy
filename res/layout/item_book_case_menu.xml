@@ -23,17 +23,17 @@
         
         android:maxLines="2"
         android:text="都破残穷 "
-        android:textColor="@color/dark" />
+        android:textColor="#555555" />
 
      <TextView
          android:id="@+id/book_status"
          android:layout_width="84dp"
          android:layout_height="wrap_content"
          android:layout_above="@+id/book_name"
-         android:background="#bbbbbb"
+         android:background="#747882"
           android:layout_centerHorizontal="true"
          android:text="已完结 "
-         android:textColor="@color/dark" />
+         android:textColor="@color/white" />
 
      <ImageView
          android:id="@+id/img_selected"

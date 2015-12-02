@@ -13,7 +13,6 @@ import com.example.readerjoy.R;
 import com.example.readerjoy.base.widget.CustomToast;
 import com.example.readerjoy.dialog.MarkDialog;
 import com.example.readerjoy.entity.Book;
-import com.example.readerjoy.fragment.BookcaseFragment;
 import com.example.readerjoy.helper.MarkHelper;
 import com.example.readerjoy.vo.MarkVo;
 
@@ -26,7 +25,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +38,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
@@ -411,7 +408,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			if (ccc == null) {
 				if (show) {// 如果popwindow正在显示
 					popDismiss();
-					getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+					//getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 					show = false;
 					mPopupWindow.dismiss();
 					popupWindowHeader.dismiss();
@@ -443,7 +440,6 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			dealWinPop();
 			
 		}
-
 		return super.onKeyUp(keyCode, event);
 	}
 
@@ -461,9 +457,8 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			closeWinPop();
 
 		} else {
-
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+			//getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			//getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 			show = true;
 
 			pop();
@@ -481,7 +476,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 	* @throws 
 	*/ 
 	private void closeWinPop() {
-		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+		//getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 		show = false;
 		mPopupWindow.dismiss();
 		popupWindowHeader.dismiss();
@@ -557,7 +552,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		bookBtn3.setOnClickListener(this);
 		bookBtn4.setOnClickListener(this);
 		
-		popupWindowHeader.showAtLocation(findViewById(R.id.relativeLayout_parent), Gravity.TOP,0, 50);
+		popupWindowHeader.showAtLocation(findViewById(R.id.relativeLayout_parent), Gravity.TOP,0, 0);
 	}
 
 	/**
@@ -888,4 +883,5 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 			
 		}
 	}
+	
 }
