@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/header"
     android:layout_width="fill_parent"
-    android:layout_height="48dp"
+    android:layout_height="45dp"
     android:background="@color/header"
     android:gravity="center_vertical"
     android:orientation="horizontal" >
@@ -16,7 +16,7 @@
         android:drawSelectorOnTop="true"
         android:maxHeight="24dp"
         android:maxWidth="60dp"
-        android:paddingLeft="25dp"
+        android:paddingLeft="10dp"
 
         android:soundEffectsEnabled="false"
         android:src="@drawable/ico_back" />
@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="58dp"
@@ -40,7 +40,7 @@
     <ImageView
         android:id="@+id/rightSign"
         android:layout_width="60dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:src="@drawable/search"
@@ -53,7 +53,7 @@
 	<TextView
         android:id="@+id/rightText"
         android:layout_width="100dp"
-        android:layout_height="30dp"
+        android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:ellipsize="end"
@@ -62,6 +62,7 @@
         android:singleLine="true"
         android:text="开通包月"
         android:textColor="#ffffff"
-        android:textSize="20dp" 
-        android:visibility="gone"/>
+        android:textSize="14sp" 
+         android:visibility="gone"
+       />
 </RelativeLayout>

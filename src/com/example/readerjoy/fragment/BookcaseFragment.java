@@ -7,6 +7,7 @@ import java.util.Map;
 import com.example.readerjoy.BookStore;
 import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.R;
+import com.example.readerjoy.activity.BaseActivity;
 import com.example.readerjoy.activity.BookDetailActivity;
 import com.example.readerjoy.activity.LoginActivity;
 import com.example.readerjoy.activity.ReadActivity;
@@ -100,7 +101,7 @@ public class BookcaseFragment extends Fragment{
 		dataList.add(addBook);
 		gview_book = (GridView) mainView.findViewById(R.id.gview_book);
 		
-		adapter = new BookCaseAdapter(getActivity(),dataList,true);
+		adapter = new BookCaseAdapter((BaseActivity)getActivity(),dataList,true);
 		gview_book.setAdapter(adapter);
 		
 	}

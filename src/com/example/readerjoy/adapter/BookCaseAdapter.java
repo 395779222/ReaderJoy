@@ -4,12 +4,14 @@ import java.util.List;
 
 import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.R;
+import com.example.readerjoy.activity.BaseActivity;
 import com.example.readerjoy.activity.ReadActivity;
 import com.example.readerjoy.entity.Book;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -22,14 +24,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class BookCaseAdapter extends BaseAdapter{
-	private Activity activity = null;
+	private BaseActivity activity = null;
 	private List<Book> dataList;
 	private int selectNum = 0;
 	boolean isCase = false;
-	public BookCaseAdapter(Activity activity, List<Book> dataList,boolean isCase) {
+	private SharedPreferences sp;
+	public BookCaseAdapter(BaseActivity activity, List<Book> dataList,boolean isCase) {
 		this.activity = activity;
 		this.dataList = dataList;
 		this.isCase = isCase; 
+		sp = activity.getSharedPreferences("config", activity.MODE_PRIVATE);
 	}
 
 	@Override
@@ -47,6 +51,7 @@ public class BookCaseAdapter extends BaseAdapter{
 		return position;
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		BookCaseHolder bookCaseHolder = null;
@@ -61,6 +66,15 @@ public class BookCaseAdapter extends BaseAdapter{
 				bookCaseHolder.img_book.setColorFilter(Color.GRAY,PorterDuff.Mode.MULTIPLY);
 			}if(book.getType()==3){
 				bookCaseHolder.book_status.setVisibility(View.GONE);
+				bookCaseHolder.book_status_name.setVisibility(View.GONE);
+			}else{
+				bookCaseHolder.book_status.getBackground().setAlpha(125);
+			}
+			String progress = sp.getString(book.getPath() + "fPercent", null);
+			if(progress!=null){
+				bookCaseHolder.book_progress.setText(progress);
+			}else{
+				bookCaseHolder.book_progress.setVisibility(View.GONE);
 			}
 		
 		}
@@ -73,6 +87,8 @@ public class BookCaseAdapter extends BaseAdapter{
 		private TextView book_name;
 		private ImageView img_selected;
 		private TextView book_status;
+		private TextView book_status_name; 
+		private TextView book_progress;
 		Book book;
 		
 		private BookCaseHolder(View convertView,Book book) {
@@ -80,6 +96,8 @@ public class BookCaseAdapter extends BaseAdapter{
 			img_selected =  (ImageView) convertView.findViewById(R.id.img_selected);
 			book_name = (TextView) convertView.findViewById(R.id.book_name);
 			book_status = (TextView) convertView.findViewById(R.id.book_status);
+			book_status_name = (TextView) convertView.findViewById(R.id.book_status_name);
+			book_progress = (TextView) convertView.findViewById(R.id.book_progress);
 			this.book = book;
 			if(isCase){
 				initEvent();
@@ -102,7 +120,7 @@ public class BookCaseAdapter extends BaseAdapter{
 	            public boolean onLongClick(View v) {
 	            	((MainActivity) activity).bookCaseEdit();
 					return isCase;
-	            	
+
 	            }
 	        });
 	            

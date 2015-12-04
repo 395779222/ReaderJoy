@@ -15,10 +15,14 @@ import java.util.List;
 import com.example.readerjoy.BookStore;
 import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.R;
+import com.example.readerjoy.activity.BaseActivity;
 import com.example.readerjoy.activity.BookDetailActivity;
 import com.example.readerjoy.activity.ReadActivity;
 import com.example.readerjoy.adapter.BookCaseAdapter;
+import com.example.readerjoy.adapter.CategoryAdapter;
 import com.example.readerjoy.entity.Book;
+import com.example.readerjoy.entity.BookCategory;
+
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
@@ -51,6 +55,11 @@ public class BookCityFragment extends Fragment{
 	private BookCaseAdapter byAdapter;
 	private RelativeLayout jptj;
 	private RelativeLayout byzq;
+	
+	GridView gview_book_category;
+	List<BookCategory>categoryList ;
+	CategoryAdapter categoryAdapter ;
+	
     @Override
     public View onCreateView(LayoutInflater inflater,
            ViewGroup container, Bundle savedInstanceState) {
@@ -78,6 +87,7 @@ public class BookCityFragment extends Fragment{
 		dataBYList = BookStore.getInstance(getActivity()).getMainBYBook();
 		jptj = (RelativeLayout) mainView.findViewById(R.id.jptj);
 		byzq = (RelativeLayout) mainView.findViewById(R.id.byzq);
+		gview_book_category = (GridView) mainView.findViewById(R.id.gview_book_category);
 	}
 	
 	/** 
@@ -90,10 +100,14 @@ public class BookCityFragment extends Fragment{
 	* @throws 
 	*/ 
 	private void initAdapter() {
-		jpAdapter = new BookCaseAdapter(getActivity(),dataJPList,false);
+		categoryList = BookStore.getInstance(getActivity()).getBookCategoryList();
+		categoryAdapter = new CategoryAdapter(getActivity(),categoryList);
+		gview_book_category.setAdapter(categoryAdapter);
+		
+		jpAdapter = new BookCaseAdapter((BaseActivity)getActivity(),dataJPList,false);
 		gview_jptj.setAdapter(jpAdapter);
 		
-		byAdapter = new BookCaseAdapter(getActivity(),dataBYList,false);
+		byAdapter = new BookCaseAdapter((BaseActivity)getActivity(),dataBYList,false);
 		gview_byzq.setAdapter(byAdapter);
 		
 	}
@@ -142,6 +156,25 @@ public class BookCityFragment extends Fragment{
 					Book book = dataBYList.get(position);
 					jumpToBookDetail(book);
 				}});
+			
+			gview_book_category.setOnItemClickListener(new OnItemClickListener() {
+				@SuppressLint("NewApi")
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					BookCategory  cate = categoryList.get(position);
+					MainActivity activity = (MainActivity) getActivity();
+					activity.updateFragmentByCategory(cate.getIndex(),cate.getName());
+					/*List<Book>dataList = BookStore.getInstance(getActivity()).getAllBook();
+					List<Book> bookDateList = new Arry
+					BookCategory  cate = categoryList.get(position);
+					for(Book book : dataList){
+						if(book.getCateGoryType().indexOf(cate.getIndex()+"")>-1){
+							
+							bookDateList.add(book);
+						}
+					}*/
+				}
+			});
 		}
 		
 		private void jumpToBookDetail(Book book){

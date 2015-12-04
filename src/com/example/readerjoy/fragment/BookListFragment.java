@@ -56,6 +56,8 @@ public class BookListFragment extends Fragment{
 	List<Book>bookDateList ;
 	BookAdapter bookAdapter;
 	
+	private boolean isShowCategoryBook = false;
+	
 	@Override
     public View onCreateView(LayoutInflater inflater,
            ViewGroup container, Bundle savedInstanceState) {
@@ -75,12 +77,12 @@ public class BookListFragment extends Fragment{
 	* @throws 
 	*/ 
 	private void initAdapter(){
-		gview_book_category = (GridView) mainView.findViewById(R.id.gview_book_category);
+		//gview_book_category = (GridView) mainView.findViewById(R.id.gview_book_category);
 		list_book = (ListViewForScrollView) mainView.findViewById(R.id.list_book);
 		
-		categoryList = BookStore.getInstance(getActivity()).getBookCategoryList();
-		categoryAdapter = new CategoryAdapter(getActivity(),categoryList);
-		gview_book_category.setAdapter(categoryAdapter);
+		//categoryList = BookStore.getInstance(getActivity()).getBookCategoryList();
+		//categoryAdapter = new CategoryAdapter(getActivity(),categoryList);
+		//gview_book_category.setAdapter(categoryAdapter);
 		
 		bookList = ((MainActivity)getActivity()).listToShowByType;
 		bookDateList =  ((MainActivity)getActivity()).listToShowByType;
@@ -112,7 +114,7 @@ public class BookListFragment extends Fragment{
 				startActivity(mIntent);
 			}
 		});
-		gview_book_category.setOnItemClickListener(new OnItemClickListener() {
+		/*gview_book_category.setOnItemClickListener(new OnItemClickListener() {
 			@SuppressLint("NewApi")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -120,14 +122,14 @@ public class BookListFragment extends Fragment{
 				bookDateList.clear();
 				BookCategory  cate = categoryList.get(position);
 				for(Book book : bookList){
-					if(book.getCateGoryType() == cate.getIndex()){
+					if(book.getCateGoryType().indexOf(cate.getIndex()+"")>-1){
 						bookDateList.add(book);
 					}
 				}
 				bookAdapter = new BookAdapter(getActivity(),bookDateList);
 				list_book.setAdapter(bookAdapter);
 			}
-		});
+		});*/
 	}
 
 	public List<Book> getBookList() {

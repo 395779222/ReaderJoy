@@ -61,7 +61,7 @@ public class BookStore {
 				book.setType(Integer.parseInt(bookTypes[i]));
 				book.setMoney(Integer.parseInt(bookMoneys[i]));
 				book.setIntrdoduction(bookIntroductions[i]);
-				book.setCateGoryType(Integer.parseInt(cateGoryTypes[i]));
+				book.setCateGoryType(cateGoryTypes[i]);
 				book.setBookIsPurchase(0);
 				bookStore.list.add(book);
 			}
@@ -108,6 +108,7 @@ public class BookStore {
 		}
 		return bookStore.allJBYist;
 	}
+
 	/**
 	* @Title: getAllJPBook 
 	* @Description: 获取所有精品推荐小说

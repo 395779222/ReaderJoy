@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.readerjoy.activity.BaseActivity;
+import com.example.readerjoy.activity.BookByActivity;
 import com.example.readerjoy.activity.LoginActivity;
 import com.example.readerjoy.activity.ReadActivity;
 import com.example.readerjoy.activity.SearchActivity;
@@ -272,7 +273,10 @@ public class MainActivity extends BaseActivity {
 		rightText.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				bookCaseEdit();
+				if(rightText.getText().equals("开通包月")){
+					sp.edit().putBoolean("isBY", true).commit();
+					CustomToast.getInstance(MainActivity.this).showToast("包月成功");
+				}
 			}
 		});
 	}
@@ -328,7 +332,7 @@ public class MainActivity extends BaseActivity {
 						e.printStackTrace();
 					}
 				}
-
+				
 				ArrayList<HashMap<String, String>> insertList = new ArrayList<HashMap<String, String>>();
 				File[] f1 = path.listFiles();
 				int len = f1.length;
@@ -379,6 +383,31 @@ public class MainActivity extends BaseActivity {
 			super.onPostExecute(result);
 		}
 	}
+
+	/** 
+	* @Title: updateFragmentByCategory 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param @param index    设定文件 
+	* @date 2015年12月3日 下午2:29:06
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	public void updateFragmentByCategory(int index,String name) {
+		listToShowByType = new ArrayList<Book>();
+		fragment = new BookListFragment();
+		List<Book> allList = BookStore.getInstance(MainActivity.this).getAllBYBook();
+		for(Book book : allList){
+			if(book.getCateGoryType().indexOf(index+"")>-1){
+				listToShowByType.add(book);
+			}
+		}
+		tvTitle.setText(name+" 专区");
+		//rightText.setVisibility(View.VISIBLE);
+		//rightText.setText("开通包月");
+		showSecond();
+		updateFragment();
+	}
 	
 	/**
 	 * 
@@ -398,7 +427,13 @@ public class MainActivity extends BaseActivity {
 			fragment = new BookListFragment();
 			listToShowByType = BookStore.getInstance(MainActivity.this).getAllBYBook();
 			tvTitle.setText("包月专区");
-			rightText.setVisibility(View.GONE);
+			rightText.setVisibility(View.VISIBLE);
+			if(sp.getBoolean("isBY", false)){
+				rightText.setText("已包月");
+			}
+			else{
+				rightText.setText("开通包月");
+			}
 			showSecond();
 		}
 		//书城内点击精品专区
@@ -429,6 +464,21 @@ public class MainActivity extends BaseActivity {
 			showDefaultBookCase();
 			
 		}
+		updateFragment(); 
+	}
+
+
+	/** 
+	* @Title: updateFragment 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param     设定文件 
+	* @date 2015年12月3日 下午2:37:28
+	* @author jerry
+	* @return void    返回类型
+	* @throws 
+	*/ 
+	@SuppressLint("NewApi")
+	private void updateFragment() {
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
 		try {
@@ -438,7 +488,7 @@ public class MainActivity extends BaseActivity {
 			fragmentTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 
@@ -486,12 +536,13 @@ public class MainActivity extends BaseActivity {
 	private void showDefaultBookCase() {
 		tvTitle.setText("芝士阅读");
 		btnExit.setImageResource(R.drawable.menu);
-		rightText.setText("编辑");
-		rightText.setVisibility(View.VISIBLE);
+		//rightText.setText("编辑");
+		rightText.setVisibility(View.GONE);
 		btnExitType = 0;
-		rightSign.setVisibility(View.GONE);
-		//rightSign.setVisibility(View.VISIBLE);
+		//rightSign.setVisibility(View.GONE);
+		rightSign.setVisibility(View.VISIBLE);
 	}
+	
 	/**
 	 * 
 	* @Title: creatPopupWindowHeader 
@@ -517,7 +568,7 @@ public class MainActivity extends BaseActivity {
 		// 设置允许在外点击消失
 		popupWindowHeader.setOutsideTouchable(true);
 		popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.NO_GRAVITY,
-				0, 0);
+				0, 50);
 		//popupWindowHeader.setBackgroundDrawable(new BitmapDrawable());
 		//popupWindowHeader.showAsDropDown(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), xPos, 0);
 		initPopEvent();
@@ -565,8 +616,6 @@ public class MainActivity extends BaseActivity {
 			
 		}
 	}
-
-
 	/**
 	 * 
 	* @Title: updateSelectNum 
@@ -591,8 +640,12 @@ public class MainActivity extends BaseActivity {
 	* @return void    返回类型
 	* @throws 
 	*/ 
-	public void bookCaseEdit() {
-		if(rightText.getText().equals("编辑")){
+	public void bookCaseEdit() {	
+		/*if(rightText.getText().equals("开通包月")){
+			sp.edit().putBoolean("isBY", true).commit();
+			CustomToast.getInstance(MainActivity.this).showToast("包月成功");
+		}*/
+		//if(rightText.getText().equals("编辑")){
 			if(fragment!=null&&fragment.getClass().getSimpleName().equals("BookcaseFragment")){
 				if(!winPopHeaderIsShow){
 					if(popupWindowHeader==null){
@@ -604,7 +657,7 @@ public class MainActivity extends BaseActivity {
 						
 					}else{
 						popupWindowHeader.showAtLocation(mainRelativeLayout.findViewById(R.id.relativeLayout_parent), Gravity.TOP,
-								0, 0);
+								0, 50);
 						((BookcaseFragment)fragment).editBookCase();
 						isEdit = true;
 						winPopHeaderIsShow = true;
@@ -614,7 +667,7 @@ public class MainActivity extends BaseActivity {
 				}
 			}
 		
-		}
+		//}
 	}
 	@Override
 	protected void onResume() {
@@ -660,4 +713,6 @@ public class MainActivity extends BaseActivity {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+
 }

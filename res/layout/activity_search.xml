@@ -1,52 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mian"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical" >
     
-    <include layout="@layout/layout_head" 
-  
-        android:visibility="gone"
-        />
-	
-     <RelativeLayout 
-          android:id="@+id/rl_search"
-        android:layout_marginTop="20dp"
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content">
-    	
-		 <EditText 
+   <RelativeLayout 
+    android:id="@+id/header"
+    android:layout_width="fill_parent"
+    android:layout_height="45dp"
+    android:background="@color/header"
+    android:gravity="center_vertical"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/btnExit"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:drawSelectorOnTop="true"
+        android:maxHeight="24dp"
+        android:maxWidth="60dp"
+        android:soundEffectsEnabled="false"
+        android:src="@drawable/ico_back" />
+
+   		<RelativeLayout 
+   		    android:layout_toRightOf="@+id/btnExit"
+		    android:layout_width="fill_parent"
+		    android:layout_marginLeft="10dp"
+		    android:layout_height="40dp">	
+		    
+    	 <EditText 
 	         android:id="@+id/ed_search"
 	         android:layout_width="170dp"
 	         android:layout_height="35dp"
-	         android:layout_marginLeft="10dp"
-	         android:hint="书名/作者"
-	         android:background="@drawable/edit_bk"
+	     	 android:layout_marginLeft="8dp"
+	         android:layout_centerVertical="true"
+	         android:textColorHint="#c18f1c"
+	          android:textColor="#c18f1c"
+	          android:textSize="16sp"
+	         android:hint="书名/作者/关键字"
+	         
+	         android:background="@color/header"
          />
-	     <Button
-	         android:id="@+id/btn_search"
-	         android:layout_width="80dp"
-	         android:layout_height="35dp"
-	         android:layout_toRightOf="@+id/ed_search"
-	         android:layout_marginLeft="25dp"
-	         android:background="@drawable/corners_btn_bg_selected"
-	         android:text="搜索"
-	         android:textColor="@color/white" />
-	  </RelativeLayout>
-	  
-    	<View
-	        android:layout_width="match_parent"
-	        android:layout_height="1dp"
-	        android:layout_marginTop="10dp"
-	        android:background="@color/line_bj"/>
+    	<View 
+    	     android:layout_width="match_parent"
+    	     android:layout_height="4dp"
+    	     android:layout_marginRight="20dp"
+	         android:layout_marginTop="30dp"
+
+	         android:background="@drawable/search_bottom"
+	        
+    	      />
+
+	    <ImageView
+	        android:id="@+id/btn_search"
+	        android:layout_width="60dp"
+	        android:layout_height="25dp"
+	        android:layout_centerVertical="true"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginRight="8dp"
+	        android:src="@drawable/search"
+	        android:gravity="center"
+	        android:textColor="#ffffff"
+	        android:textSize="16sp"
+        />
+   		</RelativeLayout>
+	</RelativeLayout>
     	
     	<RelativeLayout
-    	      android:id="@+id/rl_show"
+    	    android:id="@+id/rl_show"
     	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content" >
 			<RelativeLayout
     	       android:id="@+id/rl_show_head"
+    	       android:layout_marginTop="10dp"
+    	        android:layout_marginBottom="10dp"
     	       android:layout_width="match_parent"
     	       android:layout_height="wrap_content" >	
 	    	    <TextView

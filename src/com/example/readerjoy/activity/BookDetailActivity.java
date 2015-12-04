@@ -10,7 +10,9 @@
 
 package com.example.readerjoy.activity;
 
+import com.example.readerjoy.MainActivity;
 import com.example.readerjoy.R;
+import com.example.readerjoy.base.widget.CustomToast;
 import com.example.readerjoy.db.LocalBook;
 import com.example.readerjoy.entity.Book;
 
@@ -19,10 +21,13 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -33,6 +38,7 @@ import android.widget.TextView;
 * 
 */
 public class BookDetailActivity extends BaseActivity{
+	private SharedPreferences sp;
 	private ImageView img_book;
 	private TextView book_name;
 	private TextView book_introduction;
@@ -44,7 +50,9 @@ public class BookDetailActivity extends BaseActivity{
 	Button btn_reader;
 	Button btn_shop;
 	LocalBook localbook;
-
+	LinearLayout mian;
+	float beginx = 0;
+	float endx = 0;
 	/* (非 Javadoc) 
 	* <p>Title: bindWidget</p> 
 	* <p>Description: </p>  
@@ -53,6 +61,7 @@ public class BookDetailActivity extends BaseActivity{
 	@Override
 	public void bindWidget() {
 		setContentView(R.layout.activity_book_detail);
+		mian = (LinearLayout) findViewById(R.id.detail_mian);
 		img_book = (ImageView) findViewById(R.id.img_book);
 		btnExit  = (ImageView) findViewById(R.id.btnExit);
 		book_name = (TextView) findViewById(R.id.book_name);
@@ -65,6 +74,7 @@ public class BookDetailActivity extends BaseActivity{
 		btn_shop = (Button) findViewById(R.id.btn_shop);
 		tvTitle = (TextView) findViewById(R.id.tvTitle);
 		localbook = new LocalBook(this);
+		sp = getSharedPreferences("config", MODE_PRIVATE);
 	}
 
 	/* (非 Javadoc) 
@@ -74,6 +84,25 @@ public class BookDetailActivity extends BaseActivity{
 	*/ 
 	@Override
 	public void bindWidgetEevent() {
+		
+		mian.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction()==MotionEvent.ACTION_DOWN){
+					beginx = event.getX();
+				}
+				
+				if(event.getAction()==MotionEvent.ACTION_UP){
+					endx = event.getX();
+					if(endx>beginx){
+						finish();
+					}
+				}
+				
+				return true;
+			}
+		});
+		
 		btnExit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -114,7 +143,13 @@ public class BookDetailActivity extends BaseActivity{
 		btn_shop.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
+				boolean bookIsPurchase = sp.getBoolean(book.getPath()+"bookIsPurchase", false); 	
+				if(bookIsPurchase||sp.getBoolean("isBY", false)){
+					CustomToast.getInstance(BookDetailActivity.this).showToast("已购买过此书，无需重复购买");
+				}
+				else{
+					sp.edit().putBoolean(book.getPath()+"bookIsPurchase", false).commit();
+				}
 			}
 		});
 	}
@@ -143,9 +178,24 @@ public class BookDetailActivity extends BaseActivity{
 			book_introduction.setText("  "+book.getIntrdoduction());
 			book_money.setText("价格：包月|"+book.getMoney()+"元/本");
 			book_author.setText(book.getAuthor());
-			tvTitle.setText(book.getBookName()+" 详情");
 		}
-		
+		tvTitle.setText("作品详情");
+		boolean bookIsPurchase = sp.getBoolean(book.getPath()+"bookIsPurchase", false); 	
+		//若是包月用户
+		if(sp.getBoolean("isBY", false)){
+			btn_reader.setText("阅读");
+		}else{
+			if(book.getType()==1){
+				if(bookIsPurchase){
+					btn_reader.setText("阅读");
+				}
+				else{
+					btn_reader.setText("试读");
+				}
+			}else{
+				btn_reader.setText("阅读");
+			}
+		}
 	}
 	/**
 	 * 禁止返回键

@@ -27,12 +27,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,11 +50,9 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class SearchActivity extends BaseActivity {
 	private RelativeLayout header;
-	private RelativeLayout rl_search;
-	private RelativeLayout rl_show;
+	RelativeLayout rl_show;
 	EditText ed_search;
-	Button btn_search;
-	private TextView tvTitle;
+	ImageView btn_search;
 	TextView text_change;
 	private ImageView btnExit;
 	GridViewForScrollView gview_book;
@@ -63,6 +64,9 @@ public class SearchActivity extends BaseActivity {
 	BookAdapter searchBookAdapter;
 	
 	List<Book>allBookList;
+	LinearLayout mian;
+	float beginx = 0;
+	float endx = 0;
 	/* (非 Javadoc) 
 	* <p>Title: bindWidget</p> 
 	* <p>Description: </p>  
@@ -71,16 +75,15 @@ public class SearchActivity extends BaseActivity {
 	@Override
 	public void bindWidget() {
 		setContentView(R.layout.activity_search);
+		mian = (LinearLayout) findViewById(R.id.mian);
 		header = (RelativeLayout) findViewById(R.id.header);
-		rl_search = (RelativeLayout) findViewById(R.id.rl_search);
-		rl_show = (RelativeLayout) findViewById(R.id.rl_show);
 		ed_search = (EditText) findViewById(R.id.ed_search);
-		btn_search = (Button) findViewById(R.id.btn_search);
+		btn_search = (ImageView) findViewById(R.id.btn_search);
 		text_change = (TextView) findViewById(R.id.text_change);
-		tvTitle  = (TextView) findViewById(R.id.tvTitle);
 		gview_book = (GridViewForScrollView) findViewById(R.id.gview_book);
 		list_book = (ListViewForScrollView) findViewById(R.id.list_book);
 		btnExit = (ImageView) findViewById(R.id.btnExit);
+		rl_show = (RelativeLayout) findViewById(R.id.rl_show);
 		allBookList = BookStore.getInstance(SearchActivity.this).getAllBook();
 	}
 
@@ -101,11 +104,10 @@ public class SearchActivity extends BaseActivity {
 				}else{
 					list_book.setVisibility(View.VISIBLE);
 					header.setVisibility(View.VISIBLE);
-					rl_search.setVisibility(View.GONE);
 					rl_show.setVisibility(View.GONE);
-					searchBookAdapter = new BookAdapter(SearchActivity.this,searchBookList);
-					list_book.setAdapter(searchBookAdapter);
 				}
+				searchBookAdapter = new BookAdapter(SearchActivity.this,searchBookList);
+				list_book.setAdapter(searchBookAdapter);
 			}
 		});
 		text_change.setOnClickListener(new OnClickListener() {
@@ -140,6 +142,26 @@ public class SearchActivity extends BaseActivity {
 				Book book = searchBookList.get(position);
 				jumpToBookDetail(book);
 			}});
+		
+		mian.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction()==MotionEvent.ACTION_DOWN){
+					beginx = event.getX();
+				}
+				
+				if(event.getAction()==MotionEvent.ACTION_UP){
+					endx = event.getX();
+					if(endx>beginx){
+						finish();
+					}
+				}
+				
+				return true;
+			}
+			
+		});
 	}
 	
 	/** 
@@ -206,7 +228,7 @@ public class SearchActivity extends BaseActivity {
 	*/ 
 	@Override
 	public void process() {
-		tvTitle.setText("搜索");
+		
 	}
 	
 	private void jumpToBookDetail(Book book){
@@ -215,5 +237,6 @@ public class SearchActivity extends BaseActivity {
         mBundle.putSerializable("book",book);     
         mIntent.putExtras(mBundle);     
 		startActivity(mIntent);
+		
 	}
 }

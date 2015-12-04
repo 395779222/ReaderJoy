@@ -11,7 +11,7 @@ public class Book implements Serializable{
 	private String intrdoduction="暂无介绍";
 	private int type = 0;//0:精品推荐，1：包月专区
 	private int money = 0;//包月钱
-	private int cateGoryType  = 0;
+	private String cateGoryType  = "";
 	private int  bookIsPurchase;////0:未购买，1：已购买
 	
 	private boolean isSelected = false;
@@ -72,10 +72,11 @@ public class Book implements Serializable{
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public int getCateGoryType() {
+	
+	public String getCateGoryType() {
 		return cateGoryType;
 	}
-	public void setCateGoryType(int cateGoryType) {
+	public void setCateGoryType(String cateGoryType) {
 		this.cateGoryType = cateGoryType;
 	}
 	public int getBookIsPurchase() {

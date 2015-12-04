@@ -59,11 +59,15 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 				ColorStateList csl = (ColorStateList) resource.getColorStateList(R.color.header);
 				bottomMenuHolder.text_name.setTextColor(csl);
 				bottomMenuHolder.img_menu.setBackgroundResource(menu.getSelectedImg());
+				bottomMenuHolder.top_line.setVisibility(View.VISIBLE);
+				bottomMenuHolder.top_line_un.setVisibility(View.GONE);
 			}else{
 				Resources resource = (Resources) context.getResources();  
 				ColorStateList csl = (ColorStateList) resource.getColorStateList(R.color.botton_un_select);
 				bottomMenuHolder.text_name.setTextColor(csl);
 				bottomMenuHolder.img_menu.setBackgroundResource(menu.getUnSelectedImg());
+				bottomMenuHolder.top_line.setVisibility(View.GONE);
+				bottomMenuHolder.top_line_un.setVisibility(View.VISIBLE);
 			}
 		
 		}
@@ -74,9 +78,13 @@ public class GridBottomMenuAdapter extends BaseAdapter {
 	private class BottomMenuHolder {
 		TextView text_name;
 		ImageView img_menu;
+		ImageView top_line;
+		ImageView top_line_un;
 		private BottomMenuHolder(View convertView) {
 			text_name = (TextView) convertView.findViewById(R.id.text_name);
 			img_menu = (ImageView) convertView.findViewById(R.id.img_menu);
+			top_line = (ImageView) convertView.findViewById(R.id.top_line);
+			top_line_un = (ImageView) convertView.findViewById(R.id.top_line_un);
 		}
 	}
 }

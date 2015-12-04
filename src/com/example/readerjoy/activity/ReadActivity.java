@@ -258,7 +258,7 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 		Display display = manage.getDefaultDisplay();
 		screenWidth = display.getWidth();
 		screenHeight = display.getHeight();
-		defaultSize = (screenWidth * 20) / 320;
+		defaultSize = (screenWidth * 20) / 380;
 		readHeight = screenHeight - (50 * screenWidth) / 320;
 
 		mCurPageBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
@@ -345,6 +345,9 @@ public class ReadActivity extends Activity  implements OnClickListener, OnSeekBa
 								mPageWidget.postInvalidate();
 							}
 							editor.putInt(book.getPath() + "begin", begin).commit();
+							DecimalFormat df = new DecimalFormat("#0.0");
+							String strPercent = df.format(pagefactory.getfPercent() * 100) + "%";
+							editor.putString(book.getPath() + "fPercent", strPercent);
 						}
 							
 					}

@@ -2,35 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/white"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+    android:layout_height="fill_parent">
     
 	<RelativeLayout
 	     android:layout_width="match_parent"
          android:layout_height="match_parent">
-         
+        
+	      <ImageView
+	        android:id="@+id/top_line"
+	        android:layout_width="fill_parent"
+	        android:layout_height="4dp"
+	        android:background="@color/header" />
+	      
+	      <ImageView
+	        android:id="@+id/top_line_un"
+	        android:layout_width="fill_parent"
+	        android:layout_height="1dp"
+	        android:visibility="gone"
+	        android:background="#bbbbbb" />
+	      
+	    
+       
 	    <RelativeLayout
+	         android:id="@+id/rl_menu"
+		     android:layout_width="match_parent"
+	         android:layout_height="60dp"
+	         android:layout_centerHorizontal="true">
+	         
+	    <ImageView
+	        android:id="@+id/right_line_un"
+	        android:layout_width="1dp"
+	        android:layout_height="fill_parent"
+	        android:layout_alignParentRight="true"
+	        android:background="#bbbbbb" />
+	    
+	        <RelativeLayout
 		     android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:layout_centerInParent="true">
-		   <ImageView
-		     android:layout_margin="2dp"
-	         android:id="@+id/img_menu"
-	         android:layout_width="32dp"
-	         android:layout_height="32dp"
-	         android:background="@drawable/book_case"
-	         />
+	         android:layout_height="60dp"
+	         android:layout_centerHorizontal="true">
+		     <TextView
+		         android:id="@+id/text_name"
+		         android:layout_width="wrap_content"
+		         android:layout_height="wrap_content"
+		         android:layout_alignBottom="@+id/img_menu"
+		         android:layout_alignTop="@+id/img_menu"
+		
+		        
+		         android:layout_toRightOf="@+id/img_menu"
+		         android:soundEffectsEnabled="false"
+		         android:text="书城"
+		         android:textColor="@color/header"
+		         android:textSize="16sp" />
 	
-	     <TextView
-	         android:id="@+id/text_name"
-	         android:layout_width="wrap_content"
-	         android:layout_height="wrap_content"
-	         android:soundEffectsEnabled="false"
-	         android:layout_toRightOf="@+id/img_menu"
-	         android:text="书城"
-	         android:layout_centerInParent="true"
-	         android:textColor="@color/header"
-	         android:textSize="20dp" />
+		     <ImageView
+		         android:id="@+id/img_menu"
+		         android:layout_width="20dp"
+		         android:layout_height="20dp"
+		       
+		         android:layout_centerVertical="true"
+		         android:layout_marginRight="2dp"
+		         android:background="@drawable/book_case" />
+	     
+	     </RelativeLayout>
+
 	    </RelativeLayout>
 	  
 	</RelativeLayout>

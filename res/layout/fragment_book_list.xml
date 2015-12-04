@@ -5,13 +5,7 @@
     android:background="@color/white"
     android:orientation="vertical" >
    
-     <com.example.readerjoy.base.widget.GridViewForScrollView
-        android:id="@+id/gview_book_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:horizontalSpacing="10dp" 
-        android:numColumns="5" >
-    </com.example.readerjoy.base.widget.GridViewForScrollView>
+    
      <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
